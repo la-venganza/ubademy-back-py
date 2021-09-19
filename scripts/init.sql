@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS course(
+	id serial PRIMARY KEY,
+	title VARCHAR(255) NOT NULL,
+	length INTEGER NOT NULL,
+    year INTEGER NOT NULL,
+	teacher VARCHAR(40) NOT NULL,
+    subject VARCHAR(100) NOT NULL
+);
