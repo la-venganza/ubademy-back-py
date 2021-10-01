@@ -8,6 +8,19 @@ docker-compose build
 docker-compose up -d
 ```
 
+## Swagger UI docs
+
+```bash
+http://localhost:8080/docs
+```
+
+## ReDoc docs
+
+```bash
+http://localhost:8080/redoc
+```
+
+
 ## How to browse
 
 ```bash
