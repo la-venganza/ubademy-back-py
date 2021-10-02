@@ -1,8 +1,10 @@
-![Build Status](https://github.com//la-venganza/ubademy-back-py/actions/workflows/python-app.yml/badge.svg?branch=joacols-patch-1)
+[![Build Status](https://app.travis-ci.com/la-venganza/ubademy-back-py.svg?branch=develop)](https://app.travis-ci.com/la-venganza/ubademy-back-py)
 
+[![Coverage Status](https://coveralls.io/repos/github/la-venganza/ubademy-back-py/badge.svg?branch=develop)](https://coveralls.io/github/la-venganza/ubademy-back-py?branch=develop)
 
 # ubademy-back-py
 Taller 2 - 2c 2021 - Backend python repository
+
 
 ## How to run 
 
