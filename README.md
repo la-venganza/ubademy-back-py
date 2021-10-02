@@ -1,6 +1,6 @@
-[![Build Status](https://app.travis-ci.com/la-venganza/ubademy-back-py.svg?branch=joacols-patch-1)](https://app.travis-ci.com/la-venganza/ubademy-back-py)
+[![Build Status](https://app.travis-ci.com/la-venganza/ubademy-back-py.svg?branch=develop)](https://app.travis-ci.com/la-venganza/ubademy-back-py)
 
-[![Coverage Status](https://coveralls.io/repos/github/la-venganza/ubademy-back-py/badge.svg?branch=joacols-patch-1)](https://coveralls.io/github/la-venganza/ubademy-back-py?branch=joacols-patch-1)
+[![Coverage Status](https://coveralls.io/repos/github/la-venganza/ubademy-back-py/badge.svg?branch=develop)](https://coveralls.io/github/la-venganza/ubademy-back-py?branch=develop)
 
 ## How to run 
 
