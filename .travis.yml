@@ -5,9 +5,9 @@ before_install:
   - python --version
   - pip install -U pip
   - pip install -U pytest
-  - pip install codecov
+  - pip install pytest-cov
 install:
   - pip install -r requirements.txt # install package + test dependencies
-script: pytest # run tests
+script: pytest --cov # run tests
 after_success:
-  - codecov # submit coverage
+  - coveralls
