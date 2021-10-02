@@ -1,3 +1,6 @@
+[![Build Status](https://github.com//la-venganza/ubademy-back-py/actions/workflows/python-app.yml/badge.svg)]
+
+
 # ubademy-back-py
 Taller 2 - 2c 2021 - Backend python repository
 
