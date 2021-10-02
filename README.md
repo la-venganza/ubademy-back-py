@@ -2,6 +2,10 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/la-venganza/ubademy-back-py/badge.svg?branch=develop)](https://coveralls.io/github/la-venganza/ubademy-back-py?branch=develop)
 
+# ubademy-back-py
+Taller 2 - 2c 2021 - Backend python repository
+
+
 ## How to run 
 
 ```bash
