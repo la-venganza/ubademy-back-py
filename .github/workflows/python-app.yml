@@ -5,9 +5,7 @@ name: Python application
 
 on:
   push:
-    branches: 
-      -develop
-      -joacols-patch-1
+    branches: [ joacols-patch-1]
   pull_request:
     branches: [ develop ]
 
