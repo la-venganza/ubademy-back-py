@@ -1,4 +1,4 @@
-[![Build Status](https://github.com//la-venganza/ubademy-back-py/actions/workflows/python-app.yml/badge.svg)]
+![Build Status](https://github.com//la-venganza/ubademy-back-py/actions/workflows/python-app.yml/badge.svg?branch=joacols-patch-1)
 
 
 # ubademy-back-py
