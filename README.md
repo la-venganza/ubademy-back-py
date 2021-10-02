@@ -1,7 +1,7 @@
 # ubademy-back-py
 Taller 2 - 2c 2021 - Backend python repository
 
-## How to run
+## How to run 
 
 ```bash
 docker-compose build
