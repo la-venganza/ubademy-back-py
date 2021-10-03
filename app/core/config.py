@@ -18,6 +18,7 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     SQLALCHEMY_DATABASE_URI: Optional[str] = "postgresql://fake:1234321@pgdb:5432/ubademy"
+    DATADOG_AGENT_HOST: Optional[str] = ""
 
     class Config:
         env_file = ".env"
