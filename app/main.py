@@ -4,7 +4,7 @@ from os import path
 from ddtrace import patch, tracer
 from fastapi import FastAPI
 
-from app.courses.api_v1.api import course_router
+from app.api.api_v1.api import api_router
 from app.core.config import settings
 
 # setup loggers
@@ -24,7 +24,7 @@ tracer.configure(
 
 app = FastAPI(title="Ubademy-back-py API", openapi_url="/openapi.json")
 
-app.include_router(course_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 if __name__ == "__main__":

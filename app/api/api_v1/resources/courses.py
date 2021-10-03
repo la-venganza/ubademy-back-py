@@ -1,10 +1,10 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.courses.schemas import CourseCreate, Course, CourseSearchResults
+from app.schemas.course import CourseCreate, Course, CourseSearchResults
 from app import deps
 from app import crud
 # from common.error_handling import ObjectNotFound
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/", status_code=200)
+@router_v1.get("/", status_code=status.HTTP_200_OK)
 async def get():
     """""
        Get courses api
@@ -23,8 +23,8 @@ async def get():
     return {"msg": "I'm a course"}
 
 
-@router_v1.get("/search/", status_code=200, response_model=CourseSearchResults)
-async def search_recipes(
+@router_v1.get("/search/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
+async def search_courses(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="java"),
     max_results: Optional[int] = 10,
@@ -41,7 +41,7 @@ async def search_recipes(
     return {"results": list(results)[:max_results]}
 
 
-@router_v1.post("/", status_code=201, response_model=Course)
+@router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
 async def post(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
 
     course = crud.course.create(db=db, obj_in=course_in)
@@ -49,7 +49,7 @@ async def post(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> 
     return course
 
 
-@router_v1.get("/{course_id}", status_code=200)
+@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK)
 async def get(course_id: int, db: Session = Depends(deps.get_db), ):
     """""
     Get a single course by id
@@ -59,7 +59,7 @@ async def get(course_id: int, db: Session = Depends(deps.get_db), ):
 
     if course is None:
         # raise ObjectNotFound('The course doesnt not exist')
-        raise HTTPException(status_code=404, detail=f"The course with id {course_id} was not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The course with id {course_id} was not found")
 
     return course
 
