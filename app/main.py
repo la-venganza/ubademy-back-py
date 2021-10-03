@@ -1,18 +1,21 @@
 import logging
+from os import path
 
 from fastapi import FastAPI
 
-from app.courses.api_v1.api import course_router
+from app.api.api_v1.api import api_router
 from app.core.config import settings
 
 # setup loggers
-logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+log_file_path = path.join(path.dirname(path.abspath(__file__)), '../logging.conf')
+logging.config.fileConfig(log_file_path, disable_existing_loggers=False)
+# logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Ubademy-back-py API", openapi_url="/openapi.json")
 
-app.include_router(course_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
 if __name__ == "__main__":
