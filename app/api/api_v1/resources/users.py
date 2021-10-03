@@ -14,15 +14,6 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/fake", status_code=200)
-async def get():
-    """""
-       Get users api
-    """
-    logging.info("Nonsense endpoint")
-    return {"msg": "I'm a user"}
-
-
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSearchResults)
 async def get_users(
     *,
