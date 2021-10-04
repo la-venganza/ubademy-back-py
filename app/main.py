@@ -1,7 +1,7 @@
 import logging
 from os import path
 
-from ddtrace import patch, tracer
+from ddtrace import patch, tracer, config
 from fastapi import FastAPI
 
 from app.api.api_v1.api import api_router
@@ -21,6 +21,9 @@ tracer.configure(
     hostname=settings.DATADOG_AGENT_HOST,
     port=8126,
 )
+
+# Override service name
+config.fastapi['service_name'] = settings.DD_SERVICE
 
 app = FastAPI(title="Ubademy-back-py API", openapi_url="/openapi.json")
 
