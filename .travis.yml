@@ -9,6 +9,7 @@ before_install:
   - pip install coveralls
 install:
   - pip install -r requirements.txt # install package + test dependencies
-script: pytest --cov # run tests
+script:
+  - py.test app/test/afke_tests.py --doctest-modules --pep8 coveralls -v --cov coveralls --cov-report term-missing
 after_success:
   - coveralls

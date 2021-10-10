@@ -6,7 +6,7 @@ authors = ["classmates"]
 
 
 [tool.poetry.dependencies]
-python = "3.9"
+python = "3.8.10"
 uvicorn = "~0.15.0"
 python-multipart = "~0.0.5"
 pydantic = {extras = ["email","dotenv"], version = "~1.8.2"}
