@@ -12,6 +12,7 @@ services:
             - "8080:8080"
         depends_on:
             - postgres-db
+            - datadog-agent
     postgres-db:
         container_name: pgdb
         image: postgres:13
@@ -26,3 +27,20 @@ services:
             POSTGRES_PASSWORD: "1234321"
             POSTGRES_DB: ubademy
             PGDATA: /appdb
+    datadog-agent:
+        container_name: datadog-agent
+        image: datadog/agent:latest
+        environment:
+            - DD_API_KEY=${DATADOG_API_KEY}
+            - DD_SITE=${DATADOG_SITE:-datadoghq.com}
+            - DD_HOSTNAME=${HOSTNAME}
+            - DD_LOGS_ENABLED=true
+            #- DD_PROCESS_AGENT_ENABLED=true
+            - DD_APM_ENABLED=true
+            - NON_LOCAL_TRAFFIC=true
+#            - DD_BIND_HOST=0.0.0.0
+        ports:
+            - "8126:8126/tcp"
+        volumes:
+            # Logs are collected from container stdout/stderr from the Docker socket.
+            - /var/run/docker.sock:/var/run/docker.sock:ro

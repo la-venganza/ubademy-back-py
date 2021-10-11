@@ -1,6 +1,7 @@
 import logging
 from os import path
 
+from ddtrace import patch, tracer, config
 from fastapi import FastAPI
 
 from app.api.api_v1.api import api_router
@@ -9,9 +10,20 @@ from app.core.config import settings
 # setup loggers
 log_file_path = path.join(path.dirname(path.abspath(__file__)), '../logging.conf')
 logging.config.fileConfig(log_file_path, disable_existing_loggers=False)
-# logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
 
 logger = logging.getLogger(__name__)
+
+# Datadog
+# Patch is here only for those who choose not to use `ddtrace-run`
+patch(fastapi=True)
+
+tracer.configure(
+    hostname=settings.DATADOG_AGENT_HOST,
+    port=8126,
+)
+
+# Override service name
+config.fastapi['service_name'] = settings.DD_SERVICE
 
 app = FastAPI(title="Ubademy-back-py API", openapi_url="/openapi.json")
 
