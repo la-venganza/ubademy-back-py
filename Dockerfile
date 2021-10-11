@@ -1,5 +1,7 @@
 FROM python:3.9
 
+
+
 RUN mkdir -p /opt/application/ubademy-back-py
 COPY pyproject.toml /opt/application/ubademy-back-py
 COPY run.sh /opt/application/ubademy-back-py
