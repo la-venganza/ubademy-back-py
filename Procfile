@@ -1,1 +1,1 @@
-web: bash run.sh
+web: poetry run ./run.sh
