@@ -15,9 +15,10 @@ SQLAlchemy = "^1.4.25"
 pylint = "^2.11.1"
 psycopg2-binary = "^2.9.1"
 ddtrace = "^0.53.3"
+fastapi = "^0.70.0"
 
 [tool.poetry.dev-dependencies]
-fastapi = "^0.68.1"
+fastapi = "^0.70.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
