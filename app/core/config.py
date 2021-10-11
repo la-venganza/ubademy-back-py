@@ -1,5 +1,5 @@
 from pydantic import AnyHttpUrl, BaseSettings, validator
-from typing import List, Optional, Union
+from typing import List, Union
 
 
 class Settings(BaseSettings):
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    DATABASE_URL: Optional[str] = "postgresql://fake:1234321@pgdb:5432/ubademy"
+    DATABASE_URL: str
     DATADOG_AGENT_HOST: str
     DD_SERVICE: str
 
