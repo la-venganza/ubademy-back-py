@@ -53,7 +53,7 @@ async def get(user_id: str, db: Session = Depends(deps.get_db), ):
     user = crud.user.get_by_user_id(db=db, user_id=user_id)
 
     if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The user with id {user_id} was not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The user with id {user_id} was not found")
 
     return user
-

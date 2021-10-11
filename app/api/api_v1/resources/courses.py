@@ -59,7 +59,7 @@ async def get(course_id: int, db: Session = Depends(deps.get_db), ):
 
     if course is None:
         # raise ObjectNotFound('The course doesnt not exist')
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The course with id {course_id} was not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The course with id {course_id} was not found")
 
     return course
-
