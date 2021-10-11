@@ -123,7 +123,7 @@ idna = ">=2.0.0"
 name = "fastapi"
 version = "0.68.2"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6.1"
 
@@ -359,7 +359,7 @@ sqlcipher = ["sqlcipher3-binary"]
 name = "starlette"
 version = "0.14.2"
 description = "The little ASGI library that shines."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -433,7 +433,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.7"
-content-hash = "723523694a879be8fe76ae3366876da161333f39f0d73d1d766fb22e119911a4"
+content-hash = "6a131fdb2c934764f07799767a75996991aa7486e4ce8eb51437c91e8ba46230"
 
 [metadata.files]
 asgiref = [
