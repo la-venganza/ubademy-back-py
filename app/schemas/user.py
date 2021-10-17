@@ -35,13 +35,12 @@ class UserSearchResults(BaseModel):
 
 
 # Additional ...
-class UserInDBCompleteBase(UserInDBBase):
-    user_id: str
+class UserInDBCompleteBase(User):
     created_courses: List[Course]
     attending_courses: List[Course]
+    collaborating_courses: List[Course]
 
 
 # Properties to receive via API on update
 class UserUpdate(BaseModel):
-    attending_courses: List[Course]
-
+    ...

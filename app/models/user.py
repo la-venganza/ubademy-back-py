@@ -28,4 +28,4 @@ class UserAccount(Base):
     collaborating_courses = relationship(
         "Course",
         secondary=collaborator_table,
-        back_populates="students")
+        back_populates="collaborators")
