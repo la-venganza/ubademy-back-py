@@ -1,10 +1,9 @@
 from pydantic import BaseModel, Field
 
-from typing import Sequence
+from typing import List
 
 
 class CourseBase(BaseModel):
-    id: int
     title: str
     length: int
     year: int
@@ -19,6 +18,10 @@ class CourseCreate(CourseBase):
     teacher: str
     subject: str
     creator_id: str = Field(alias="user_id")
+
+
+class CourseRegistration(BaseModel):
+    user_id: str
 
 
 class CourseUpdate(CourseBase):
@@ -40,4 +43,4 @@ class Course(CourseInDBBase):
 
 
 class CourseSearchResults(BaseModel):
-    results: Sequence[Course]
+    results: List[Course]

@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
 from app.models.student import student_table
+from app.models.collaborator import collaborator_table
 
 
 class UserAccount(Base):
@@ -23,4 +24,8 @@ class UserAccount(Base):
     attending_courses = relationship(
         "Course",
         secondary=student_table,
+        back_populates="students")
+    collaborating_courses = relationship(
+        "Course",
+        secondary=collaborator_table,
         back_populates="students")

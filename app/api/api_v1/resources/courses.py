@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.schemas.course import CourseCreate, Course, CourseSearchResults
+from app.schemas.course import CourseCreate, Course, CourseSearchResults, CourseRegistration
 from app import deps
 from app import crud
 # from common.error_handling import ObjectNotFound
@@ -33,7 +33,7 @@ async def search_courses(
 
 
 @router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
-async def post(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
+async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
     user_id = course_in.creator_id
     user = crud.user.get_by_user_id(db=db, user_id=user_id)
 
@@ -58,5 +58,31 @@ async def get(course_id: int, db: Session = Depends(deps.get_db), ):
         # raise ObjectNotFound('The course doesnt not exist')
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The course with id {course_id} was not found")
+
+    return course
+
+
+@router_v1.post("/{course_id}/registration", status_code=status.HTTP_200_OK, response_model=Course)
+async def course_registration(course_id: int, course_registration_rq: CourseRegistration,
+                              db: Session = Depends(deps.get_db),) -> dict:
+    course = crud.course.get(db=db, id=course_id)
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Course with id {course_id} was not found")
+
+    user_id = course_registration_rq.user_id
+    user = crud.user.get_by_user_id(db=db, user_id=user_id)
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The user with id {user_id} was not found")
+
+    if any(filter(lambda course: str(course_id) in str(course.id), user.attending_courses)):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"User {user_id} is already register in course {course_id}")
+
+    user.attending_courses.append(course)
+
+    crud.user.update_user(db=db, updated_user=user)
 
     return course
