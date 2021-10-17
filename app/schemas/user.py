@@ -20,6 +20,7 @@ class UserCreate(UserBase):
 
 class UserInDBBase(UserBase):
     user_id: str
+    blocked: bool
 
     class Config:
         orm_mode = True

@@ -15,6 +15,7 @@ class UserAccount(Base):
     email = Column(String, index=True, nullable=False)
     role = Column(String, nullable=True)
     is_admin = Column(Boolean, default=False)
+    blocked = Column(Boolean, default=False)
     created_courses = relationship(
         "Course",
         cascade="all,delete-orphan",
