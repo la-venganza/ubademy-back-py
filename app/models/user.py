@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base
+from app.models.student import student_table
 
 
 class UserAccount(Base):
@@ -12,3 +14,13 @@ class UserAccount(Base):
     email = Column(String, index=True, nullable=False)
     role = Column(String, nullable=True)
     is_admin = Column(Boolean, default=False)
+    created_courses = relationship(
+        "Course",
+        cascade="all,delete-orphan",
+        back_populates="creator",
+        uselist=True,
+    )
+    attending_courses = relationship(
+        "Course",
+        secondary=student_table,
+        back_populates="students")

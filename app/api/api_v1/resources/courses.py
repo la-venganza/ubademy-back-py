@@ -14,15 +14,6 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/", status_code=status.HTTP_200_OK)
-async def get():
-    """""
-       Get courses api
-    """
-    logging.info("Nonsense endpoint")
-    return {"msg": "I'm a course"}
-
-
 @router_v1.get("/search/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
 async def search_courses(
     *,
@@ -43,6 +34,12 @@ async def search_courses(
 
 @router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
 async def post(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
+    user_id = course_in.creator_id
+    user = crud.user.get_by_user_id(db=db, user_id=user_id)
+
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"The user with id {user_id} was not found")
 
     course = crud.course.create(db=db, obj_in=course_in)
 

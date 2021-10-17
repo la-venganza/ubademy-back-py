@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from typing import Sequence
 
@@ -18,6 +18,7 @@ class CourseCreate(CourseBase):
     year: int
     teacher: str
     subject: str
+    creator_id: str = Field(alias="user_id")
 
 
 class CourseUpdate(CourseBase):
@@ -27,6 +28,7 @@ class CourseUpdate(CourseBase):
 # Properties shared by models stored in DB
 class CourseInDBBase(CourseBase):
     id: int
+    creator_id: str
 
     class Config:
         orm_mode = True
