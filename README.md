@@ -6,6 +6,13 @@
 Taller 2 - 2c 2021 - Backend python repository
 
 
+# Database changes
+When a change to the database is made, run following command to capture the change
+```bash
+alembic revision --autogenerate -m "Description of change"
+```
+
+
 ## How to run 
 
 ```bash
