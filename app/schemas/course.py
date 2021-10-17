@@ -24,6 +24,10 @@ class CourseRegistration(BaseModel):
     user_id: str
 
 
+class CourseCollaboration(BaseModel):
+    user_id: str
+
+
 class CourseUpdate(CourseBase):
     subject: str
 
