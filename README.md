@@ -12,6 +12,10 @@ When a change to the database is made, run following command to capture the chan
 alembic revision --autogenerate -m "Description of change"
 ```
 
+If command doesn't work, try using prefix: PYTHONPATH=. as 
+```bash
+PYTHONPATH=. alembic revision --autogenerate -m "Description of change"
+```
 
 ## How to run 
 
