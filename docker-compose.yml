@@ -22,7 +22,6 @@ services:
         ports:
             - "5432:5432"
         volumes:
-            - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
             - ./app/postgres:/ubademydb
         environment:
             POSTGRES_USER: fake
