@@ -25,6 +25,12 @@ class CRUDUser(CRUDBase[UserAccount, UserCreate, UserUpdate]):
 
         return db_obj
 
+    def update_user(self, db: Session, *, updated_user: UserAccount) -> UserAccount:
+        db.add(updated_user)
+        db.commit()
+        db.refresh(updated_user)
+        return updated_user
+
     def update(
         self, db: Session, *, db_obj: UserAccount, obj_in: Union[UserUpdate, Dict[str, Any]]
     ) -> UserAccount:

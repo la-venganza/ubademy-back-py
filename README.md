@@ -6,6 +6,22 @@
 Taller 2 - 2c 2021 - Backend python repository
 
 
+## Alembic - Database changes
+When a change to the database is made, run following command to capture the change
+```bash
+alembic revision --autogenerate -m "Description of change"
+```
+
+If command doesn't work, try using prefix: PYTHONPATH=. as 
+```bash
+PYTHONPATH=. alembic revision --autogenerate -m "Description of change"
+```
+
+Run to make sure database is up to date
+```bash
+PYTHONPATH=. alembic upgrade head
+```
+
 ## How to run 
 
 ```bash

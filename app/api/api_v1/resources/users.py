@@ -1,10 +1,10 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.schemas.user import UserCreate, User, UserSearchResults
+from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase
 from app import deps
 from app import crud
 
@@ -45,10 +45,14 @@ async def post(user_in: UserCreate, db: Session = Depends(deps.get_db),) -> dict
     return user
 
 
-@router_v1.get("/{user_id}", status_code=status.HTTP_200_OK, response_model=User)
-async def get(user_id: str, db: Session = Depends(deps.get_db), ):
+@router_v1.get("/{user_id}", status_code=status.HTTP_200_OK, response_model=Union[UserInDBCompleteBase, User])
+async def get(
+        user_id: str,
+        db: Session = Depends(deps.get_db),
+        properties: Optional[str] = Query(None, min_length=3, example="all"),
+        ):
     """""
-    Get a single user by id
+    Get a single basic user by id, if property all is sent, full information is get.
     """
     user = crud.user.get_by_user_id(db=db, user_id=user_id)
 
@@ -56,4 +60,7 @@ async def get(user_id: str, db: Session = Depends(deps.get_db), ):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The user with id {user_id} was not found")
 
-    return user
+    if "all" == properties:
+        return UserInDBCompleteBase.from_orm(user)
+
+    return User.from_orm(user)

@@ -1,6 +1,8 @@
-from typing import Optional, Sequence
+from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr
+
+from app.schemas.course import Course
 
 
 class UserBase(BaseModel):
@@ -16,13 +18,9 @@ class UserCreate(UserBase):
     email: EmailStr
 
 
-# Properties to receive via API on update
-class UserUpdate(UserBase):
-    ...
-
-
 class UserInDBBase(UserBase):
     user_id: str
+    blocked: bool
 
     class Config:
         orm_mode = True
@@ -34,4 +32,16 @@ class User(UserInDBBase):
 
 
 class UserSearchResults(BaseModel):
-    results: Sequence[User]
+    results: List[User]
+
+
+# Additional ...
+class UserInDBCompleteBase(User):
+    created_courses: List[Course]
+    attending_courses: List[Course]
+    collaborating_courses: List[Course]
+
+
+# Properties to receive via API on update
+class UserUpdate(BaseModel):
+    ...
