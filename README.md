@@ -22,6 +22,16 @@ Run to make sure database is up to date
 PYTHONPATH=. alembic upgrade head
 ```
 
+If you want to go back to a previous version
+```bash
+PYTHONPATH=. alembic downgrade version
+```
+
+Or you just want to downgrade before last version
+```bash
+PYTHONPATH=. alembic downgrade -1
+```
+
 ## How to run 
 
 ```bash
