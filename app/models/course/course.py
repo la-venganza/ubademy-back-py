@@ -14,10 +14,6 @@ class Course(Base):
     location = Column(String(100), nullable=True)
     hashtags = Column(String(256), index=True, nullable=False)
     creation_date = Column(DateTime(timezone=True), server_default=func.now())
-    # length = Column(String(256), nullable=False)
-    # year = Column(Integer, nullable=False)
-    # teacher = Column(String(256), nullable=False)
-    # subject = Column(String(256), index=True, nullable=False)
     creator_id = Column(String(256), ForeignKey("user_account.user_id"), nullable=True)
     creator = relationship("UserAccount", back_populates="created_courses")
     students = relationship(

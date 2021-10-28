@@ -10,7 +10,7 @@ class Question(Base):
     sequence_number = Column(Integer, nullable=False)
     type = Column(String(100), nullable=False)
     score = Column(Integer, nullable=False)
-    multiple_choice = relationship(
+    multiple_choice_question = relationship(
         "MultipleChoiceQuestion",
         uselist=False
     )
