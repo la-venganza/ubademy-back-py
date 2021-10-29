@@ -2,13 +2,16 @@ from typing import List
 
 from pydantic import BaseModel
 
-from schemas.course.choice import Choice, ChoiceBase
+from schemas.course.choice import ChoiceBase
 
 
 class MultipleChoiceQuestionBase(BaseModel):
     text: str
     amount_of_options: int
     choices: List[ChoiceBase]
+
+    class Config:
+        orm_mode = True
 
 
 class MultipleChoiceQuestionCreate(MultipleChoiceQuestionBase):
@@ -22,7 +25,6 @@ class MultipleChoiceQuestionUpdate(MultipleChoiceQuestionBase):
 class MultipleChoiceQuestionInDBBase(MultipleChoiceQuestionBase):
     id: int
     question_id: int
-    choices: List[Choice]
 
     class Config:
         orm_mode = True

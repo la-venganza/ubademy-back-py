@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 from typing import List, Optional
 
-from app.schemas.course.exam import Exam, ExamBase
+from app.schemas.course.exam import ExamBase
 
 
 class LessonBase(BaseModel):
@@ -11,6 +11,9 @@ class LessonBase(BaseModel):
     sequence_number: int
     multimedia_id: int
     exam: Optional[ExamBase] = None
+
+    class Config:
+        orm_mode = True
 
 
 class LessonCreate(LessonBase):
@@ -25,7 +28,6 @@ class LessonUpdate(LessonBase):
 class LessonInDBBase(LessonBase):
     id: int
     course_id: int
-    exam: Optional[Exam] = None
 
     class Config:
         orm_mode = True

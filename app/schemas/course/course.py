@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 from typing import List
 
-from app.schemas.course.lesson import Lesson, LessonBase
+from app.schemas.course.lesson import LessonBase
 
 
 class CourseBase(BaseModel):
@@ -12,6 +12,9 @@ class CourseBase(BaseModel):
     hashtags: str
     location: str
     lessons: List[LessonBase]
+
+    class Config:
+        orm_mode = True
 
 
 class CourseCreate(CourseBase):
@@ -34,7 +37,6 @@ class CourseUpdate(CourseBase):
 class CourseInDBBase(CourseBase):
     id: int
     creator_id: str
-    lessons: List[Lesson]
 
     class Config:
         orm_mode = True

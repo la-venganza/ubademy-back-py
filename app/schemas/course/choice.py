@@ -5,6 +5,9 @@ class ChoiceBase(BaseModel):
     text: str
     is_correct: bool
 
+    class Config:
+        orm_mode = True
+
 
 class ChoiceCreate(ChoiceBase):
     multiple_choice_question_id: int

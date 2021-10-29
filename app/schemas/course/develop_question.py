@@ -4,6 +4,9 @@ from pydantic import BaseModel
 class DevelopQuestionBase(BaseModel):
     text: str
 
+    class Config:
+        orm_mode = True
+
 
 class DevelopQuestionCreate(DevelopQuestionBase):
     question_id: int

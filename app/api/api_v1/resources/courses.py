@@ -22,7 +22,7 @@ async def search_courses(
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for courses based on subject keyword
+    Search for courses based on hashtags keyword
     """
     courses = crud.course.get_multi(db=db, limit=max_results)
     if not keyword:
