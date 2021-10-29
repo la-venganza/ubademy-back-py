@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
+from app.db.base_class import Base, auto_init
 
 
 class Lesson(Base):
@@ -16,3 +16,7 @@ class Lesson(Base):
         "Exam",
         uselist=False,
     )
+
+    @auto_init()
+    def __init__(self, **_):
+        pass

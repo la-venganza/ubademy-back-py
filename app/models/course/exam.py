@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
+from app.db.base_class import Base, auto_init
 
 
 class Exam(Base):
@@ -13,3 +13,7 @@ class Exam(Base):
     questions = relationship("Question")
     # TODO This is temporarily here, just if we decide that we want to create an exam separate from a lesson
     lesson = relationship("Lesson", back_populates="exam")
+
+    @auto_init()
+    def __init__(self, **_):
+        pass

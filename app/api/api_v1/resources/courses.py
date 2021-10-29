@@ -41,7 +41,7 @@ async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The user with id {user_id} was not found")
 
-    course = crud.course.create_course(db=db, course_in=course_in)
+    course = crud.course.create(db=db, obj_in=course_in)
 
     return course
 

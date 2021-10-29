@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
+from app.db.base_class import Base, auto_init
 
 
 class Question(Base):
@@ -18,3 +18,7 @@ class Question(Base):
         "DevelopQuestion",
         uselist=False
     )
+
+    @auto_init()
+    def __init__(self, **_):
+        pass
