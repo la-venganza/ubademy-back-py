@@ -10,7 +10,7 @@ class Lesson(Base):
     active = Column(Boolean, default=True)
     sequence_number = Column(Integer, nullable=False)
     multimedia_id = Column(Integer, nullable=False)
-    course_id = Column(Integer, ForeignKey('course.id'))
+    course_id = Column(Integer, ForeignKey('course.id', ondelete="CASCADE"))
     exam_id = Column(Integer, ForeignKey('exam.id'), nullable=True)
     exam = relationship(
         "Exam",

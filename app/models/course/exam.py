@@ -10,7 +10,11 @@ class Exam(Base):
     description = Column(String(256), nullable=False)
     minimum_qualification = Column(Integer, nullable=False)
     creation_date = Column(DateTime(timezone=True), server_default=func.now())
-    questions = relationship("Question")
+    questions = relationship(
+        "Question",
+        cascade="all, delete",
+        passive_deletes=True
+    )
     # TODO This is temporarily here, just if we decide that we want to create an exam separate from a lesson
     lesson = relationship("Lesson", back_populates="exam")
 

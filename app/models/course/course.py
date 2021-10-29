@@ -25,7 +25,11 @@ class Course(Base):
         secondary=collaborator_table,
         back_populates="collaborating_courses"
     )
-    lessons = relationship("Lesson")
+    lessons = relationship(
+        "Lesson",
+        cascade="all, delete",
+        passive_deletes=True
+    )
 
     @auto_init()
     def __init__(self, **_):
