@@ -19,6 +19,7 @@ fastapi = "^0.70.0"
 coveralls = "^3.2.0"
 pytest-cov = "^3.0.0"
 alembic = "^1.7.4"
+pytest-mock = "^3.6.1"
 
 [tool.poetry.dev-dependencies]
 fastapi = "^0.70.0"

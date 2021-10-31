@@ -51,7 +51,7 @@ async def get(
         db: Session = Depends(deps.get_db),
         properties: Optional[str] = Query(None, min_length=3, example="all"),
         ):
-    """""
+    """
     Get a single basic user by id, if property all is sent, full information is get.
     """
     user = crud.user.get_by_user_id(db=db, user_id=user_id)
