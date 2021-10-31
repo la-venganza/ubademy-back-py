@@ -5,6 +5,6 @@ before_install:
   - pip install poetry
 install:
   - poetry install # install packages + test dependencies
-script: pytest --cov # run tests
+script: pytest --cov=app # run tests
 after_success:
   - coveralls

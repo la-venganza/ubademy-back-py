@@ -1,5 +1,5 @@
 from pydantic import AnyHttpUrl, BaseSettings, validator
-from typing import List, Union
+from typing import List, Union, Optional
 
 
 class Settings(BaseSettings):
@@ -18,6 +18,7 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     DATABASE_URL: str
+    DATADOG_TRACE_ENABLED: Optional[bool] = False
     DATADOG_AGENT_HOST: str
     DD_SERVICE: str
 

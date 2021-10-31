@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from schemas.course.choice import ChoiceBase
+from app.schemas.course.choice import ChoiceBase
 
 
 class MultipleChoiceQuestionBase(BaseModel):

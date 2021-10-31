@@ -4,7 +4,8 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, CourseRegistration, CourseCollaboration
+from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, \
+    CourseRegistration, CourseCollaboration
 from app import deps
 from app import crud
 # from common.error_handling import ObjectNotFound
@@ -88,7 +89,7 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
 
 
 @router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)
-async def course_registration(course_id: int, course_collaboration_rq: CourseCollaboration,
+async def course_collaboration(course_id: int, course_collaboration_rq: CourseCollaboration,
                               db: Session = Depends(deps.get_db),) -> dict:
     course = crud.course.get(db=db, id=course_id)
     if course is None:
