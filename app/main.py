@@ -1,4 +1,4 @@
-import logging
+import logging.config
 from os import path
 
 from ddtrace import patch, tracer, config
@@ -20,6 +20,7 @@ patch(fastapi=True)
 tracer.configure(
     hostname=settings.DATADOG_AGENT_HOST,
     port=8126,
+    enabled=settings.DATADOG_TRACE_ENABLED
 )
 
 # Override service name

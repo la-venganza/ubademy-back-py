@@ -2,21 +2,22 @@ from pydantic import BaseModel, Field
 
 from typing import List
 
+from app.schemas.course.lesson import LessonBase
+
 
 class CourseBase(BaseModel):
     title: str
-    length: int
-    year: int
-    teacher: str
-    subject: str
+    description: str
+    type: str
+    hashtags: str
+    location: str
+    lessons: List[LessonBase]
+
+    class Config:
+        orm_mode = True
 
 
 class CourseCreate(CourseBase):
-    title: str
-    length: int
-    year: int
-    teacher: str
-    subject: str
     creator_id: str = Field(alias="user_id")
 
 
@@ -29,7 +30,7 @@ class CourseCollaboration(BaseModel):
 
 
 class CourseUpdate(CourseBase):
-    subject: str
+    hashtags: str
 
 
 # Properties shared by models stored in DB

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean
 from sqlalchemy.orm import relationship
 
-from app.db.base_class import Base
+from app.db.base_class import Base, auto_init
 from app.models.student import student_table
 from app.models.collaborator import collaborator_table
 
@@ -30,3 +30,7 @@ class UserAccount(Base):
         "Course",
         secondary=collaborator_table,
         back_populates="collaborators")
+
+    @auto_init()
+    def __init__(self, **_):
+        pass

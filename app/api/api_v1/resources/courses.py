@@ -4,7 +4,8 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.schemas.course import CourseCreate, Course, CourseSearchResults, CourseRegistration, CourseCollaboration
+from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, \
+    CourseRegistration, CourseCollaboration
 from app import deps
 from app import crud
 # from common.error_handling import ObjectNotFound
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/search/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
+@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
 async def search_courses(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="java"),
@@ -22,13 +23,13 @@ async def search_courses(
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for courses based on subject keyword
+    Search for courses based on hashtags keyword
     """
     courses = crud.course.get_multi(db=db, limit=max_results)
     if not keyword:
         return {"results": courses}
 
-    results = filter(lambda course: keyword.lower() in course.subject.lower(), courses)
+    results = filter(lambda course: keyword.lower() in course.hashtags.lower(), courses)
     return {"results": list(results)[:max_results]}
 
 
@@ -46,14 +47,13 @@ async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_
     return course
 
 
-@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK)
+@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)
 async def get(course_id: int, db: Session = Depends(deps.get_db), ):
-    """""
+    """
     Get a single course by id
     """
-    print(type(course_id))
-    course = crud.course.get(db=db, id=course_id)
-
+    logging.info(f"Getting course id {course_id}")
+    course = crud.course.get_full_by_course_id(db=db, course_id=course_id)
     if course is None:
         # raise ObjectNotFound('The course doesnt not exist')
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -89,7 +89,7 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
 
 
 @router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)
-async def course_registration(course_id: int, course_collaboration_rq: CourseCollaboration,
+async def course_collaboration(course_id: int, course_collaboration_rq: CourseCollaboration,
                               db: Session = Depends(deps.get_db),) -> dict:
     course = crud.course.get(db=db, id=course_id)
     if course is None:
