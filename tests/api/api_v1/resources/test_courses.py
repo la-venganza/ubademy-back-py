@@ -17,7 +17,8 @@ course_db_json = json.loads(
           "require": true, \
           "active": true, \
           "sequence_number": 1, \
-          "multimedia_id": 1235 \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
         } \
       ], \
       "id": 1, \
@@ -39,7 +40,8 @@ course_response_json = json.loads(
           "require": true, \
           "active": true, \
           "sequence_number": 1, \
-          "multimedia_id": 1235 \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
         } \
       ], \
       "id": 1, \
@@ -59,7 +61,8 @@ other_course_db_json = json.loads(
           "require": true, \
           "active": true, \
           "sequence_number": 1, \
-          "multimedia_id": 1235 \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
         } \
       ], \
       "id": 2, \
@@ -79,7 +82,8 @@ course_to_create_json = json.loads(
           "require": true, \
           "active": true, \
           "sequence_number": 1, \
-          "multimedia_id": 1235 \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
         } \
       ], \
       "user_id": "1" \
@@ -113,7 +117,8 @@ complete_user_info_db_json = json.loads(
               "require": true, \
               "active": true, \
               "sequence_number": 1, \
-              "multimedia_id": 1235 \
+              "multimedia_id": "1235", \
+              "multimedia_type": "pdf" \
             } \
         ], \
         "id": 1, \

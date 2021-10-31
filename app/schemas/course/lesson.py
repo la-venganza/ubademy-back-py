@@ -9,7 +9,8 @@ class LessonBase(BaseModel):
     require: bool
     active: Optional[bool] = True
     sequence_number: int
-    multimedia_id: int
+    multimedia_id: str
+    multimedia_type: str
     exam: Optional[ExamBase] = None
 
     class Config:
