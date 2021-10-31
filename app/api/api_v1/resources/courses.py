@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/search/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
+@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
 async def search_courses(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="java"),
@@ -46,7 +46,7 @@ async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_
     return course
 
 
-@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK)
+@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)
 async def get(course_id: int, db: Session = Depends(deps.get_db), ):
     """
     Get a single course by id
