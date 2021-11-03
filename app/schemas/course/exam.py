@@ -3,7 +3,7 @@ from datetime import datetime
 
 from typing import List
 
-from app.schemas.course.question import QuestionBase
+from app.schemas.course.question import QuestionBase, Question
 
 
 class ExamBase(BaseModel):
@@ -27,6 +27,7 @@ class ExamUpdate(ExamBase):
 class ExamInDBBase(ExamBase):
     id: int
     creation_date: datetime
+    questions: List[Question]
 
     class Config:
         orm_mode = True

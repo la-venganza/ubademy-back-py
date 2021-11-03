@@ -1,8 +1,8 @@
 from pydantic import BaseModel, Field
 
-from typing import List
+from typing import List, Optional
 
-from app.schemas.course.lesson import LessonBase
+from app.schemas.course.lesson import LessonBase, Lesson
 
 
 class CourseBase(BaseModel):
@@ -29,14 +29,24 @@ class CourseCollaboration(BaseModel):
     user_id: str
 
 
-class CourseUpdate(CourseBase):
-    hashtags: str
+class CourseUpdate(BaseModel):
+    hashtags: Optional[str]
+    lessons: Optional[List[Lesson]]
+
+    class Config:
+        orm_mode = True
+
+
+class CourseUpdateRq(BaseModel):
+    user_id: str
+    course: CourseUpdate
 
 
 # Properties shared by models stored in DB
 class CourseInDBBase(CourseBase):
     id: int
     creator_id: str
+    lessons: List[Lesson]
 
     class Config:
         orm_mode = True

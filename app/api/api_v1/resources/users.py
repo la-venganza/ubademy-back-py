@@ -1,13 +1,12 @@
 import logging
 from typing import Optional, Union
 
-from fastapi import APIRouter, HTTPException, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase
-from app import deps
-from app import crud
-
+from app import deps, crud
+from app.services import user_service
 
 logger = logging.getLogger(__name__)
 
@@ -54,11 +53,7 @@ async def get(
     """
     Get a single basic user by id, if property all is sent, full information is get.
     """
-    user = crud.user.get_by_user_id(db=db, user_id=user_id)
-
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"The user with id {user_id} was not found")
+    user = await user_service.get_user_by_id(db=db, user_id=user_id)
 
     if "all" == properties:
         return UserInDBCompleteBase.from_orm(user)
