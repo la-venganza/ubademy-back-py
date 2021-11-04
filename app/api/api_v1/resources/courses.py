@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
-from app.services import user_service
+from app.services import course_service, user_service
 from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, \
     CourseRegistration, CourseCollaboration, CourseUpdateRq
 from app import deps, crud
@@ -35,7 +35,7 @@ async def search_courses(
 @router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
 async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
     user_id = course_in.creator_id
-    await user_service.get_user_by_id(db, user_id)
+    await user_service.get_user_by_id(db=db, user_id=user_id)
 
     course = crud.course.create(db=db, obj_in=course_in)
 
@@ -59,10 +59,13 @@ async def get(course_id: int, db: Session = Depends(deps.get_db), ):
 @router_v1.post("/{course_id}/registration", status_code=status.HTTP_200_OK, response_model=Course)
 async def course_registration(course_id: int, course_registration_rq: CourseRegistration,
                               db: Session = Depends(deps.get_db),) -> dict:
-    course = await get_course_by_id(course_id, db)
+    """
+    Register a user in a course as a student
+    """
+    course = await course_service.get_course_by_id(course_id, db)
 
     user_id = course_registration_rq.user_id
-    user = await user_service.get_user_by_id(db, user_id)
+    user = await user_service.get_user_by_id(db=db, user_id=user_id)
 
     if any(filter(lambda course: str(course_id) in str(course.id), user.attending_courses)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -77,14 +80,17 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
 
 @router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)
 async def course_collaboration(course_id: int, course_collaboration_rq: CourseCollaboration,
-                              db: Session = Depends(deps.get_db),) -> dict:
+                               db: Session = Depends(deps.get_db),) -> dict:
+    """
+    Register a user in a course as a collaborator
+    """
     course = crud.course.get(db=db, id=course_id)
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Course with id {course_id} was not found")
 
     user_id = course_collaboration_rq.user_id
-    user = await user_service.get_user_by_id(db, user_id)
+    user = await user_service.get_user_by_id(db=db, user_id=user_id)
 
     if any(filter(lambda course: str(course_id) in str(course.id), user.collaborating_courses)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
@@ -100,10 +106,13 @@ async def course_collaboration(course_id: int, course_collaboration_rq: CourseCo
 @router_v1.patch("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)
 async def update_course(course_id: int, course_update_rq: CourseUpdateRq,
                         db: Session = Depends(deps.get_db), ) -> dict:
+    """
+    Update a course by its creator
+    """
     user_id = course_update_rq.user_id
-    await user_service.get_user_by_id(db, user_id)
+    await user_service.get_user_by_id(db=db, user_id=user_id)
 
-    course = await get_course_by_id(course_id, db)
+    course = await course_service.get_course_by_id(course_id=course_id, db=db)
 
     if course.creator_id != user_id:
         raise HTTPException(
@@ -119,10 +128,3 @@ async def update_course(course_id: int, course_update_rq: CourseUpdateRq,
 
     return course_updated
 
-
-async def get_course_by_id(course_id, db):
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
-    return course

@@ -30,7 +30,11 @@ class CourseCollaboration(BaseModel):
 
 
 class CourseUpdate(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    type: Optional[str]
     hashtags: Optional[str]
+    location: Optional[str]
     lessons: Optional[List[Lesson]]
 
     class Config:

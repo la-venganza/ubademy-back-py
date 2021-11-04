@@ -107,9 +107,16 @@ def test_users_ok_with_results(test_app, mocker):
     assert response.json() == {'results': [basic_user_info_json, basic_user_info_json]}
 
 
-def test_users_ok_filter(test_app, mocker):
+def test_users_ok_filter_keyword(test_app, mocker):
     mocker.patch.object(user, 'get_multi', return_value=[user_complete, other_complete])
-    response = test_app.get("/api/v1/users?keyword=some@mail.com")
+    response = test_app.get("/api/v1/users?keyword=some")
+    assert response.status_code == 200
+    assert response.json() == {'results': [basic_user_info_json]}
+
+
+def test_users_ok_filter_email(test_app, mocker):
+    mocker.patch.object(user, 'get_by_email', return_value=user_complete)
+    response = test_app.get("/api/v1/users?email=some@mail.com")
     assert response.status_code == 200
     assert response.json() == {'results': [basic_user_info_json]}
 

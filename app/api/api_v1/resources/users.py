@@ -2,6 +2,7 @@ import logging
 from typing import Optional, Union
 
 from fastapi import APIRouter, Depends, Query, status
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase
@@ -16,13 +17,17 @@ router_v1 = APIRouter()
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSearchResults)
 async def get_users(
     *,
-    keyword: Optional[str] = Query(None, min_length=3, example="someone@someone.com"),
+    keyword: Optional[str] = Query(None, min_length=3, example="gmail"),
+    email: Optional[EmailStr] = Query(None, example="someone@someone.com"),
     max_results: Optional[int] = 10,
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for users based on email keyword
+    Search for users based on email or/and email information
     """
+    if email:
+        return {"results": [crud.user.get_by_email(db=db, email=email)]}
+
     users = crud.user.get_multi(db=db, limit=max_results)
     if not keyword:
         return {"results": users}
