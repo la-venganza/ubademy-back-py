@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 
 from typing import List, Optional
 
-from app.schemas.course.lesson import LessonBase, Lesson
+from app.schemas.course.lesson import LessonBase, Lesson, LessonUpdate
 
 
 class CourseBase(BaseModel):
@@ -35,7 +35,7 @@ class CourseUpdate(BaseModel):
     type: Optional[str]
     hashtags: Optional[str]
     location: Optional[str]
-    lessons: Optional[List[Lesson]]
+    lessons: Optional[List[LessonUpdate]]
 
     class Config:
         orm_mode = True

@@ -323,26 +323,22 @@ exam_patch_json = json.loads(
     '{  \
         "user_id" : "1",  \
         "exam" : { \
-            "id": 1, \
             "title": "Other title", \
             "description": "description", \
             "minimum_qualification": 6, \
             "questions": [ \
               { \
                 "id": 1, \
-                "exam_id": 1, \
                 "sequence_number": 1, \
                 "type": "Choice", \
                 "score": 9, \
                 "multiple_choice_question": { \
                   "id": 1, \
-                  "question_id": 1, \
                   "text": "hola", \
                   "amount_of_options": 1, \
                   "choices": [ \
                     { \
                       "id": 1, \
-                      "multiple_choice_question_id": 1, \
                       "text": "Que paso", \
                       "is_correct": true \
                     } \
@@ -358,26 +354,22 @@ exam_patch_invalid_user_json = json.loads(
     '{  \
         "user_id" : "10",  \
         "exam" : { \
-            "id": 1, \
             "title": "Other title", \
             "description": "description", \
             "minimum_qualification": 6, \
             "questions": [ \
               { \
                 "id": 1, \
-                "exam_id": 1, \
                 "sequence_number": 1, \
                 "type": "Choice", \
                 "score": 9, \
                 "multiple_choice_question": { \
                   "id": 1, \
-                  "question_id": 1, \
                   "text": "hola", \
                   "amount_of_options": 1, \
                   "choices": [ \
                     { \
                       "id": 1, \
-                      "multiple_choice_question_id": 1, \
                       "text": "Que paso", \
                       "is_correct": true \
                     } \

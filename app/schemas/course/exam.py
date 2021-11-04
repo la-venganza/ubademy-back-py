@@ -3,7 +3,7 @@ from datetime import datetime
 
 from typing import List, Optional
 
-from app.schemas.course.question import QuestionBase, Question
+from app.schemas.course.question import QuestionBase, Question, QuestionUpdate
 
 
 class ExamBase(BaseModel):
@@ -20,11 +20,19 @@ class ExamCreate(ExamBase):
     pass
 
 
-class ExamUpdate(BaseModel):
+class ExamUpdateBase(BaseModel):
     title: Optional[str]
     description: Optional[str]
     minimum_qualification: Optional[int]
-    questions: Optional[List[Question]]
+    questions: Optional[List[QuestionUpdate]]
+
+
+class ExamUpdate(ExamUpdateBase):
+    ...
+
+
+class ExamUpdateFromLesson(ExamUpdateBase):
+    id: Optional[int]
 
 
 class ExamUpdateRq(BaseModel):

@@ -168,7 +168,6 @@ course_patch_json = json.loads(
           "lessons": [ \
             { \
               "id" : 1, \
-              "course_id" : 1, \
               "require": true, \
               "active": true, \
               "sequence_number": 1, \

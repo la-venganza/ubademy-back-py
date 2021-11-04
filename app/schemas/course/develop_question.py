@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -19,6 +21,13 @@ class DevelopQuestionUpdate(DevelopQuestionBase):
 class DevelopQuestionInDBBase(DevelopQuestionBase):
     id: int
     question_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class DevelopQuestionUpdate(DevelopQuestionBase):
+    id: Optional[int]
 
     class Config:
         orm_mode = True

@@ -2,8 +2,9 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.schemas.course.develop_question import DevelopQuestionBase, DevelopQuestion
-from app.schemas.course.multiple_choice_question import MultipleChoiceQuestionBase, MultipleChoiceQuestion
+from app.schemas.course.develop_question import DevelopQuestionBase, DevelopQuestion, DevelopQuestionUpdate
+from app.schemas.course.multiple_choice_question import MultipleChoiceQuestionBase, MultipleChoiceQuestion, \
+    MultipleChoiceQuestionUpdate
 
 
 class QuestionBase(BaseModel):
@@ -30,6 +31,15 @@ class QuestionInDBBase(QuestionBase):
     exam_id: int
     multiple_choice_question: Optional[MultipleChoiceQuestion] = None
     develop_question: Optional[DevelopQuestion] = None
+
+    class Config:
+        orm_mode = True
+
+
+class QuestionUpdate(QuestionBase):
+    id: Optional[int]
+    multiple_choice_question: Optional[MultipleChoiceQuestionUpdate] = None
+    develop_question: Optional[DevelopQuestionUpdate] = None
 
     class Config:
         orm_mode = True
