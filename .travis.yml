@@ -7,6 +7,6 @@ install:
   - poetry install # install packages + test dependencies
 env:
   - DATABASE_URL=postgresql://fake:1234321@pgdb:5432/ubademy_test DATADOG_TRACE_ENABLED=false DATADOG_AGENT_HOST=datadog-agent DATADOG_API_KEY=none DATADOG_SITE=datadoghq.com DD_SERVICE=ubademy-back-py-test HOSTNAME=travis
-script: pytest --cov=app # run tests
+script: pytest --cov-config=.coveragerc --cov=app # run tests
 after_success:
   - coveralls
