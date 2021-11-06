@@ -73,7 +73,7 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
 
     user.attending_courses.append(course)
 
-    crud.user.update_user(db=db, updated_user=user)
+    crud.user.updated_user(db=db, updated_user=user)
 
     return course
 
@@ -98,7 +98,7 @@ async def course_collaboration(course_id: int, course_collaboration_rq: CourseCo
 
     user.collaborating_courses.append(course)
 
-    crud.user.update_user(db=db, updated_user=user)
+    crud.user.updated_user(db=db, updated_user=user)
 
     return course
 
