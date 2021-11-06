@@ -34,8 +34,10 @@ class UserCreate(UserDateValidation):
 
 class UserInDBBase(UserBase):
     user_id: str
+    email: EmailStr
     blocked: bool
-    birth_date: date
+    is_admin: bool
+    birth_date: Optional[date]
 
     class Config:
         orm_mode = True

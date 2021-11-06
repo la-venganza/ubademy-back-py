@@ -10,6 +10,7 @@ complete_user_info_db_json = json.loads(
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
+      "subscription": "Base", \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -26,6 +27,10 @@ other_user_complete_user_info_db_json = json.loads(
       "email": "filter@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
+      "birth_date": null, \
+      "phone_type": null, \
+      "phone_number": null, \
+      "subscription": "Base", \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -41,6 +46,10 @@ complete_user_info_expected_json = json.loads(
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
+      "birth_date": null, \
+      "phone_type": null, \
+      "phone_number": null, \
+      "subscription": "Base", \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -49,11 +58,27 @@ complete_user_info_expected_json = json.loads(
     }'
 )
 
-basic_user_info_json = json.loads(
+basic_user_info_in_json = json.loads(
     '{ \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
+      "subscription": "Base", \
+      "role": "Owner", \
+      "user_id": "1", \
+      "blocked": false \
+    }'
+)
+
+basic_user_info_out_json = json.loads(
+    '{ \
+      "first_name": "name", \
+      "last_name": "lastname", \
+      "email": "some@mail.com.ar", \
+      "birth_date": null, \
+      "phone_type": null, \
+      "phone_number": null, \
+      "subscription": "Base", \
       "role": "Owner", \
       "is_admin": true, \
       "user_id": "1", \
@@ -69,6 +94,7 @@ user_info_extra_data_db_json = json.loads(
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
+      "subscription": "Base", \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -112,6 +138,47 @@ user_info_extra_data_db_json = json.loads(
         "creator_id": "1" \
         } \
       ] \
+    }'
+)
+
+basic_patch_user_info_json = json.loads(
+    '{ \
+      "birth_date": "20/01/1998", \
+      "subscription": "PREMIUM" \
+    }'
+)
+
+complete_user_patched_info_db_json = json.loads(
+    '{ \
+      "id": 1, \
+      "first_name": "name", \
+      "last_name": "lastname", \
+      "email": "some@mail.com.ar", \
+      "role": "Owner", \
+      "is_admin": true, \
+      "user_id": "1", \
+      "birth_date": "1998-01-20", \
+      "subscription": "PREMIUM", \
+      "blocked": false, \
+      "created_courses": [], \
+      "attending_courses": [], \
+      "collaborating_courses": [] \
+    }'
+)
+
+basic_user_patched_info_db_json = json.loads(
+    '{ \
+      "first_name": "name", \
+      "last_name": "lastname", \
+      "email": "some@mail.com.ar", \
+      "role": "Owner", \
+      "user_id": "1", \
+      "is_admin": true, \
+      "phone_type": null, \
+      "phone_number": null, \
+      "birth_date": "1998-01-20", \
+      "subscription": "PREMIUM", \
+      "blocked": false \
     }'
 )
 

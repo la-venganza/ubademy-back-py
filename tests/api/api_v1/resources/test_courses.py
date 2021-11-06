@@ -98,7 +98,7 @@ def test_course_registration_user_already_register(test_app, mocker):
 def test_course_registration_ok(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
     mocker.patch.object(user, 'get_by_user_id', return_value=user_complete_db)
-    mocker.patch.object(user, 'update_user')
+    mocker.patch.object(user, 'updated_user')
     response = test_app.post("/api/v1/courses/2/registration",
                              data=json.dumps(course_registration_json))
     assert response.status_code == 200
@@ -136,7 +136,7 @@ def test_course_collaboration_user_already_register(test_app, mocker):
 def test_course_collaboration_ok(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
     mocker.patch.object(user, 'get_by_user_id', return_value=user_complete_db)
-    mocker.patch.object(user, 'update_user')
+    mocker.patch.object(user, 'updated_user')
     response = test_app.post("/api/v1/courses/2/collaboration",
                              data=json.dumps(course_collaboration_json))
     assert response.status_code == 200
