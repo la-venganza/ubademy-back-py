@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -20,6 +22,13 @@ class ChoiceUpdate(ChoiceBase):
 class ChoiceInDBBase(ChoiceBase):
     id: int
     multiple_choice_question_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ChoiceUpdate(ChoiceBase):
+    id: Optional[int]
 
     class Config:
         orm_mode = True

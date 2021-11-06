@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-from typing import List
+from typing import List, Optional
 
-from app.schemas.course.question import QuestionBase
+from app.schemas.course.question import QuestionBase, Question, QuestionUpdate
 
 
 class ExamBase(BaseModel):
@@ -17,16 +17,38 @@ class ExamBase(BaseModel):
 
 
 class ExamCreate(ExamBase):
-    lesson_id: int
+    pass
 
 
-class ExamUpdate(ExamBase):
+class ExamUpdateBase(BaseModel):
+    title: Optional[str]
+    description: Optional[str]
+    minimum_qualification: Optional[int]
+    questions: Optional[List[QuestionUpdate]]
+
+
+class ExamUpdate(ExamUpdateBase):
     ...
+
+
+class ExamUpdateFromLesson(ExamUpdateBase):
+    id: Optional[int]
+
+
+class ExamUpdateRq(BaseModel):
+    user_id: str
+    exam: ExamUpdate
+
+
+class ExamCreateRq(BaseModel):
+    user_id: str
+    exam: ExamCreate
 
 
 class ExamInDBBase(ExamBase):
     id: int
     creation_date: datetime
+    questions: List[Question]
 
     class Config:
         orm_mode = True

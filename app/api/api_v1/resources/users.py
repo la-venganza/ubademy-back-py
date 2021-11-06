@@ -1,13 +1,13 @@
 import logging
 from typing import Optional, Union
 
-from fastapi import APIRouter, HTTPException, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase
-from app import deps
-from app import crud
-
+from app import deps, crud
+from app.services import user_service
 
 logger = logging.getLogger(__name__)
 
@@ -17,13 +17,17 @@ router_v1 = APIRouter()
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSearchResults)
 async def get_users(
     *,
-    keyword: Optional[str] = Query(None, min_length=3, example="someone@someone.com"),
+    keyword: Optional[str] = Query(None, min_length=3, example="gmail"),
+    email: Optional[EmailStr] = Query(None, example="someone@someone.com"),
     max_results: Optional[int] = 10,
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for users based on email keyword
+    Search for users based on email or/and email information
     """
+    if email:
+        return {"results": [crud.user.get_by_email(db=db, email=email)]}
+
     users = crud.user.get_multi(db=db, limit=max_results)
     if not keyword:
         return {"results": users}
@@ -54,11 +58,7 @@ async def get(
     """
     Get a single basic user by id, if property all is sent, full information is get.
     """
-    user = crud.user.get_by_user_id(db=db, user_id=user_id)
-
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"The user with id {user_id} was not found")
+    user = await user_service.get_user_by_id(db=db, user_id=user_id)
 
     if "all" == properties:
         return UserInDBCompleteBase.from_orm(user)

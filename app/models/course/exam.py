@@ -15,8 +15,6 @@ class Exam(Base):
         cascade="all, delete",
         passive_deletes=True
     )
-    # TODO This is temporarily here, just if we decide that we want to create an exam separate from a lesson
-    lesson = relationship("Lesson", back_populates="exam")
 
     @auto_init()
     def __init__(self, **_):
