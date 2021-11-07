@@ -184,4 +184,3 @@ basic_user_patched_info_db_json = json.loads(
 
 user_complete_db = UserAccount(**complete_user_info_db_json)
 other_complete_db = UserAccount(**other_user_complete_user_info_db_json)
-user_extra_data_db = UserAccount(**user_info_extra_data_db_json)

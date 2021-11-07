@@ -122,6 +122,5 @@ course_patch_json = json.loads(
     }'
 )
 
-course_db = Course(**course_db_json)
 other_course_db = Course(**other_course_db_json)
 course_updated_db = Course(**course_patch_json.get("course"))
