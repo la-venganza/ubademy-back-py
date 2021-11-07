@@ -25,6 +25,18 @@ course_db_json = json.loads(
     }'
 )
 
+lesson_db_of_course_json = json.loads(
+    '{ \
+          "id" : 1,  \
+          "course_id" : 1,  \
+          "require": true, \
+          "active": true, \
+          "sequence_number": 1, \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
+        }'
+)
+
 
 course_response_json = json.loads(
     '{ \

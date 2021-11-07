@@ -5,6 +5,7 @@ from app.main import app
 from app.models.user import UserAccount
 from app.models.course import Course
 from tests.helper.courses_helper import course_db_json
+from tests.helper.exams_helper import course_exam_db_json
 from tests.helper.users_helper import complete_user_info_db_json, \
     user_info_extra_data_db_json
 
@@ -28,3 +29,9 @@ def user_extra_data_db():
 @pytest.fixture(scope="module")
 def course_db():
     return Course(**course_db_json)
+
+
+@pytest.fixture(scope="module")
+def course_with_exam_db():
+    return Course(**course_exam_db_json)
+
