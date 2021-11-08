@@ -35,6 +35,25 @@ def test_courses_ok_filter(test_app, course_db, mocker):
     assert response.json() == {'results': [course_response_json]}
 
 
+def test_courses_ok_pagination_invalid_page_value(test_app):
+    response = test_app.get("/api/v1/courses?page_size=1&page=0")
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Page value must be at least 1'}
+
+
+def test_courses_ok_pagination_invalid_page_size(test_app):
+    response = test_app.get("/api/v1/courses?page_size=0&page=1")
+    assert response.status_code == 400
+    assert response.json() == {'detail': 'Page size must be at least 1'}
+
+
+def test_courses_ok_pagination(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get_multi', return_value=[course_db, course_db])
+    response = test_app.get("/api/v1/courses?page_size=1&page=1")
+    assert response.status_code == 200
+    assert response.json() == {'results': [course_response_json, course_response_json]}
+
+
 # ------------------ Course post ------------------------ #
 def test_courses_create_ok(test_app, course_db, mocker):
     mocker.patch.object(user, 'get_by_user_id', return_value=UserAccount())
