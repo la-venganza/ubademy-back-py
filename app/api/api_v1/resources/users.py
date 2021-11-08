@@ -5,9 +5,10 @@ from fastapi import APIRouter, Depends, Query, status
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
-from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase
+from app.schemas.user import UserCreate, User, UserSearchResults, UserInDBCompleteBase, UserUpdate
 from app import deps, crud
 from app.services import user_service
+from app.models.user import UserAccount
 
 logger = logging.getLogger(__name__)
 
@@ -64,3 +65,14 @@ async def get(
         return UserInDBCompleteBase.from_orm(user)
 
     return User.from_orm(user)
+
+
+@router_v1.patch("/{user_id}", status_code=status.HTTP_200_OK, response_model=User)
+async def update_user(user_update_rq: UserUpdate, user: UserAccount = Depends(user_service.get_user_by_id),
+                      db: Session = Depends(deps.get_db), ) -> dict:
+    """
+    Update user profile information
+    """
+    user_updated = crud.user.update(db=db, db_obj=user, obj_in=user_update_rq)
+    return user_updated
+

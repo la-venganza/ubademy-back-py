@@ -25,6 +25,18 @@ course_db_json = json.loads(
     }'
 )
 
+lesson_db_of_course_json = json.loads(
+    '{ \
+          "id" : 1,  \
+          "course_id" : 1,  \
+          "require": true, \
+          "active": true, \
+          "sequence_number": 1, \
+          "multimedia_id": "1235", \
+          "multimedia_type": "pdf" \
+        }'
+)
+
 
 course_response_json = json.loads(
     '{ \
@@ -122,6 +134,5 @@ course_patch_json = json.loads(
     }'
 )
 
-course_db = Course(**course_db_json)
 other_course_db = Course(**other_course_db_json)
 course_updated_db = Course(**course_patch_json.get("course"))

@@ -2,7 +2,7 @@ import json
 
 from app.models.course import Course, Exam
 
-course_db_json = json.loads(
+course_exam_db_json = json.loads(
     '{ \
        "title":"Curso Java", \
        "description":"Venis a aprender", \
@@ -301,7 +301,7 @@ exam_patch_invalid_user_json = json.loads(
     }'
 )
 
-course_db = Course(**course_db_json)
+course_exam_db = Course(**course_exam_db_json)
 exam_db = Exam(**exam_db_json)
 exam_db_created = Exam(**exam_to_create_db_json)
 exam_updated_db = Exam(**exam_patch_json.get("exam"))
