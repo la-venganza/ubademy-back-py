@@ -3,9 +3,11 @@ from os import path
 
 from ddtrace import patch, tracer, config
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
 
 from app.api.api_v1.api import api_router
 from app.core.config import settings
+from app.common.error_handling import custom_request_validation_exception_handler
 
 # setup loggers
 log_file_path = path.join(path.dirname(path.abspath(__file__)), '../logging.conf')
@@ -29,6 +31,10 @@ config.fastapi['service_name'] = settings.DD_SERVICE
 app = FastAPI(title="Ubademy-back-py API", openapi_url="/openapi.json")
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
+app.add_exception_handler(
+    RequestValidationError,
+    custom_request_validation_exception_handler
+)
 
 
 if __name__ == "__main__":
