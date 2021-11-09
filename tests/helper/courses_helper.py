@@ -12,6 +12,7 @@ course_db_json = json.loads(
       "lessons": [ \
         { \
           "id" : 1,  \
+          "title" : "title",  \
           "course_id" : 1,  \
           "require": true, \
           "active": true, \
@@ -28,6 +29,7 @@ course_db_json = json.loads(
 lesson_db_of_course_json = json.loads(
     '{ \
           "id" : 1,  \
+          "title" : "title",  \
           "course_id" : 1,  \
           "require": true, \
           "active": true, \
@@ -48,6 +50,8 @@ course_response_json = json.loads(
       "lessons": [ \
         { \
           "id" : 1,  \
+          "title" : "title",  \
+          "description" : null, \
           "course_id" : 1,  \
           "exam": null, \
           "require": true, \
@@ -72,6 +76,7 @@ other_course_db_json = json.loads(
       "lessons": [ \
         { \
           "id" : 1,  \
+          "title" : "title",  \
           "course_id" : 2,  \
           "require": true, \
           "active": true, \
@@ -94,6 +99,7 @@ course_to_create_json = json.loads(
       "location": "internet", \
       "lessons": [ \
         { \
+          "title" : "title",  \
           "require": true, \
           "active": true, \
           "sequence_number": 1, \
@@ -123,6 +129,7 @@ course_patch_json = json.loads(
           "lessons": [ \
             { \
               "id" : 1, \
+              "title" : "title",  \
               "require": true, \
               "active": true, \
               "sequence_number": 1, \

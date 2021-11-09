@@ -7,6 +7,7 @@ from app.schemas.course.course import Course
 
 
 class UserBase(BaseModel):
+    username: str
     first_name: Optional[str]
     last_name: Optional[str]
     role: Optional[str]
@@ -26,7 +27,6 @@ class UserInDBBase(UserBase):
     email: EmailStr
     blocked: bool
     is_admin: bool
-    birth_date: Optional[date]
 
     class Config:
         orm_mode = True
@@ -50,4 +50,5 @@ class UserInDBCompleteBase(User):
 
 # Properties to receive via API on update
 class UserUpdate(UserBase):
+    username: Optional[str]
     subscription: Optional[str]

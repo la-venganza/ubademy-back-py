@@ -6,6 +6,8 @@ from app.schemas.course.exam import ExamBase, Exam, ExamUpdateFromLesson
 
 
 class LessonBase(BaseModel):
+    title: str
+    description: Optional[str]
     require: bool
     active: Optional[bool] = True
     sequence_number: int

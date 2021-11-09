@@ -6,6 +6,8 @@ from app.db.base_class import Base, auto_init
 
 class Lesson(Base):
     id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(150), nullable=False)
+    description = Column(String(256), nullable=True)
     require = Column(Boolean, default=False)
     active = Column(Boolean, default=True)
     sequence_number = Column(Integer, nullable=False)
