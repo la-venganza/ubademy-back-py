@@ -5,6 +5,7 @@ from app.models.user import UserAccount
 complete_user_info_db_json = json.loads(
     '{ \
       "id": 1, \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -22,6 +23,7 @@ complete_user_info_db_json = json.loads(
 other_user_complete_user_info_db_json = json.loads(
     '{ \
       "id": 1, \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "filter@mail.com.ar", \
@@ -41,6 +43,7 @@ other_user_complete_user_info_db_json = json.loads(
 
 complete_user_info_expected_json = json.loads(
     '{ \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -60,6 +63,7 @@ complete_user_info_expected_json = json.loads(
 
 basic_user_info_in_json = json.loads(
     '{ \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -72,6 +76,7 @@ basic_user_info_in_json = json.loads(
 
 basic_user_info_out_json = json.loads(
     '{ \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -89,6 +94,7 @@ basic_user_info_out_json = json.loads(
 user_info_extra_data_db_json = json.loads(
     '{ \
       "id": 1, \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -107,6 +113,7 @@ user_info_extra_data_db_json = json.loads(
           "location": "internet", \
           "lessons": [ \
             { \
+              "title" : "title",  \
               "require": true, \
               "active": true, \
               "sequence_number": 1, \
@@ -127,6 +134,7 @@ user_info_extra_data_db_json = json.loads(
           "location": "internet", \
           "lessons": [ \
             { \
+              "title" : "title",  \
               "require": true, \
               "active": true, \
               "sequence_number": 1, \
@@ -151,6 +159,7 @@ basic_patch_user_info_json = json.loads(
 complete_user_patched_info_db_json = json.loads(
     '{ \
       "id": 1, \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
@@ -168,6 +177,7 @@ complete_user_patched_info_db_json = json.loads(
 
 basic_user_patched_info_db_json = json.loads(
     '{ \
+      "username" : "username",  \
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
