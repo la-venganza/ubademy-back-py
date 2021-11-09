@@ -10,6 +10,7 @@ class UserAccount(Base):
     __tablename__ = 'user_account'
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(String(256), unique=True, index=True)
+    username = Column(String(30), nullable=False)
     first_name = Column(String(256), nullable=True)
     last_name = Column(String(256), nullable=True)
     birth_date = Column(Date, nullable=True)
