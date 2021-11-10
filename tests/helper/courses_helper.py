@@ -51,6 +51,7 @@ course_response_json = json.loads(
         { \
           "id" : 1,  \
           "title" : "title",  \
+          "description" : null, \
           "course_id" : 1,  \
           "exam": null, \
           "require": true, \

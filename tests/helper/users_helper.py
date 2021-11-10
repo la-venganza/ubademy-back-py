@@ -151,7 +151,7 @@ user_info_extra_data_db_json = json.loads(
 
 basic_patch_user_info_json = json.loads(
     '{ \
-      "birth_date": "20/01/1998", \
+      "birth_date": "1998-01-20", \
       "subscription": "PREMIUM" \
     }'
 )

@@ -1,7 +1,7 @@
-from datetime import date, datetime
+from datetime import date
 from typing import Optional, List
 
-from pydantic import BaseModel, EmailStr, validator, Field
+from pydantic import BaseModel, EmailStr
 
 from app.schemas.course.course import Course
 
@@ -17,19 +17,8 @@ class UserBase(BaseModel):
     subscription: Optional[str] = "Base"
 
 
-class UserDateValidation(UserBase):
-    birth_date: Optional[date] = Field(None, example="10/02/1990")
-
-    @validator("birth_date", pre=True)
-    def parse_birth_date(cls, value):
-        return datetime.strptime(
-            value,
-            "%d/%m/%Y"
-        ).date()
-
-
 # Properties to receive via API on creation
-class UserCreate(UserDateValidation):
+class UserCreate(UserBase):
     email: EmailStr
 
 
@@ -60,6 +49,6 @@ class UserInDBCompleteBase(User):
 
 
 # Properties to receive via API on update
-class UserUpdate(UserDateValidation):
+class UserUpdate(UserBase):
     username: Optional[str]
     subscription: Optional[str]
