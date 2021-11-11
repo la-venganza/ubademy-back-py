@@ -27,7 +27,9 @@ async def get_users(
     Search for users based on email or/and email information
     """
     if email:
-        return {"results": [crud.user.get_by_email(db=db, email=email)]}
+        user = crud.user.get_by_email(db=db, email=email)
+        response = [user] if user else []
+        return {"results": response}
 
     users = crud.user.get_multi(db=db, limit=max_results)
     if not keyword:
