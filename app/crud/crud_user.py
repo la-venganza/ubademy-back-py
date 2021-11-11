@@ -1,6 +1,7 @@
 import uuid
 from typing import Any, Dict, Optional, Union
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.crud.base import CRUDBase
@@ -13,7 +14,7 @@ class CRUDUser(CRUDBase[UserAccount, UserCreate, UserUpdate]):
         return db.query(UserAccount).filter(UserAccount.user_id == user_id).first()
 
     def get_by_email(self, db: Session, *, email: str) -> Optional[UserAccount]:
-        return db.query(UserAccount).filter(UserAccount.email == email).first()
+        return db.query(UserAccount).filter(func.lower(UserAccount.email) == func.lower(email)).first()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> UserAccount:
         create_data = obj_in.dict()
