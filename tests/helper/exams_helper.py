@@ -28,6 +28,7 @@ course_exam_db_json = json.loads(
                 "id": 1, \
                 "title": "title", \
                 "description": "description", \
+                "active": false, \
                 "minimum_qualification": 6, \
                 "creation_date": "2021-10-31T04:11:49.435796+00:00", \
                 "questions": [ \
@@ -65,6 +66,7 @@ exam_db_json = json.loads(
     '{ \
       "title": "Examen Java", \
       "description": "Dependency injection exam", \
+      "active": false, \
       "minimum_qualification": 7, \
       "questions": [ \
       { \
@@ -176,6 +178,7 @@ exam_to_create_db_json = json.loads(
         "id": 1, \
         "title": "title", \
         "description": "description", \
+        "active": false, \
         "minimum_qualification": 6, \
         "creation_date": "2021-10-31T04:11:49.435796+00:00", \
         "questions": [ \
@@ -209,6 +212,7 @@ exam_response_json = json.loads(
     "id": 1, \
     "title": "title", \
     "description": "description", \
+    "active": false, \
     "minimum_qualification": 6, \
     "creation_date": "2021-10-31T04:11:49.435796+00:00", \
     "questions": [ \

@@ -10,6 +10,7 @@ class ExamBase(BaseModel):
     title: str
     description: str
     minimum_qualification: int
+    active: bool = False
     questions: List[QuestionBase]
 
     class Config:
@@ -23,6 +24,7 @@ class ExamCreate(ExamBase):
 class ExamUpdateBase(BaseModel):
     title: Optional[str]
     description: Optional[str]
+    active: Optional[bool]
     minimum_qualification: Optional[int]
     questions: Optional[List[QuestionUpdate]]
 
