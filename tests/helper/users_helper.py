@@ -15,7 +15,7 @@ complete_user_info_db_json = json.loads(
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
-      "attending_courses": [], \
+      "enroll_courses": [], \
       "collaborating_courses": [] \
     }'
 )
@@ -36,7 +36,7 @@ other_user_complete_user_info_db_json = json.loads(
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
-      "attending_courses": [], \
+      "enroll_courses": [], \
       "collaborating_courses": [] \
     }'
 )
@@ -56,7 +56,7 @@ complete_user_info_expected_json = json.loads(
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
-      "attending_courses": [], \
+      "enroll_courses": [], \
       "collaborating_courses": [] \
     }'
 )
@@ -104,25 +104,31 @@ user_info_extra_data_db_json = json.loads(
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
-      "attending_courses": [  \
+      "enroll_courses": [ \
         { \
-          "title": "Curso Java", \
-          "description": "Venis a aprender", \
-          "type": "DEV", \
-          "hashtags": "java, whatsapp, back, develop", \
-          "location": "internet", \
-          "lessons": [ \
-            { \
-              "title" : "title",  \
-              "require": true, \
-              "active": true, \
-              "sequence_number": 1, \
-              "multimedia_id": "1235", \
-              "multimedia_type": "pdf" \
+            "id": 1, \
+            "active": true, \
+            "start_date": "2020-01-01", \
+            "course_id": 1, \
+            "course": { \
+                "title": "Curso Java", \
+                "description": "Venis a aprender", \
+                "type": "DEV", \
+                "hashtags": "java, whatsapp, back, develop", \
+                "location": "internet", \
+                "lessons": [ \
+                    { \
+                        "title" : "title",  \
+                        "require": true, \
+                        "active": true, \
+                        "sequence_number": 1, \
+                        "multimedia_id": "1235", \
+                        "multimedia_type": "pdf" \
+                    } \
+                ], \
+            "id": 1, \
+            "creator_id": "1" \
             } \
-        ], \
-        "id": 1, \
-        "creator_id": "1" \
         } \
       ], \
       "collaborating_courses": [  \
@@ -170,7 +176,7 @@ complete_user_patched_info_db_json = json.loads(
       "subscription": "PREMIUM", \
       "blocked": false, \
       "created_courses": [], \
-      "attending_courses": [], \
+      "enroll_courses": [], \
       "collaborating_courses": [] \
     }'
 )

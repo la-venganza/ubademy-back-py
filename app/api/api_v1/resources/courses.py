@@ -8,6 +8,8 @@ from app.services import course_service, user_service
 from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, \
     CourseRegistration, CourseCollaboration, CourseUpdateRq
 from app import deps, crud
+from app.models.enroll_course import EnrollCourse as EnrollCourseDb
+from app.schemas.enroll_course import EnrollCourse
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ async def get(course_id: int, db: Session = Depends(deps.get_db), ):
     return course
 
 
-@router_v1.post("/{course_id}/registration", status_code=status.HTTP_200_OK, response_model=Course)
+@router_v1.post("/{course_id}/registration", status_code=status.HTTP_200_OK, response_model=EnrollCourse)
 async def course_registration(course_id: int, course_registration_rq: CourseRegistration,
                               db: Session = Depends(deps.get_db),) -> dict:
     """
@@ -70,15 +72,13 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
     user_id = course_registration_rq.user_id
     user = await user_service.get_user_by_id(db=db, user_id=user_id)
 
-    if any(filter(lambda course: str(course_id) in str(course.id), user.attending_courses)):
+    if any(filter(lambda enroll_course: str(course_id) in str(enroll_course.course_id), user.enroll_courses)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"User {user_id} is already register in course {course_id}")
 
-    user.attending_courses.append(course)
+    student_enroll_course = crud.enroll_course.create(db=db, obj_in=EnrollCourseDb(user_id=user_id, course_id=course.id))
 
-    crud.user.updated_user(db=db, updated_user=user)
-
-    return course
+    return student_enroll_course
 
 
 @router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)

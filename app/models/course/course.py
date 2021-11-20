@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base, auto_init
-from app.models.student import student_table
 from app.models.collaborator import collaborator_table
 
 
@@ -16,10 +15,7 @@ class Course(Base):
     creation_date = Column(DateTime(timezone=True), server_default=func.now())
     creator_id = Column(String(256), ForeignKey("user_account.user_id"), nullable=True)
     creator = relationship("UserAccount", back_populates="created_courses")
-    students = relationship(
-        "UserAccount",
-        secondary=student_table,
-        back_populates="attending_courses")
+    enrollments = relationship("EnrollCourse", back_populates="course")
     collaborators = relationship(
         "UserAccount",
         secondary=collaborator_table,

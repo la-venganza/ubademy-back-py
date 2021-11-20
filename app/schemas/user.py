@@ -41,10 +41,22 @@ class UserSearchResults(BaseModel):
     results: List[User]
 
 
+class UserEnrollCourseInDBBase(BaseModel):
+    active: bool
+    current_lesson: Optional[int] = None
+    grade: Optional[int] = None
+    end_date: Optional[date] = None
+    course: Course
+    start_date: date
+
+    class Config:
+        orm_mode = True
+
+
 # Additional ...
 class UserInDBCompleteBase(User):
     created_courses: List[Course]
-    attending_courses: List[Course]
+    enroll_courses: List[UserEnrollCourseInDBBase]
     collaborating_courses: List[Course]
 
 

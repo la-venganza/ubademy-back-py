@@ -1,12 +1,13 @@
 import json
 
-from app.crud import course, user
+from app.crud import course, user, enroll_course
 from app.models.user import UserAccount
 
 
 # ------------------ Courses get with filters ------------------------ #
 from tests.helper.courses_helper import course_response_json, other_course_db, course_to_create_json, \
     course_registration_json, course_collaboration_json, course_patch_json
+from tests.helper.enroll_course_helper import enroll_course_response_json
 
 
 def test_courses_invalid_keyword(test_app):
@@ -113,14 +114,15 @@ def test_course_registration_user_already_register(test_app, user_extra_data_db,
     assert response.json() == {'detail': 'User 1 is already register in course 1'}
 
 
-def test_course_registration_ok(test_app, user_complete_db, course_db, mocker):
+def test_course_registration_ok(test_app, user_complete_db, course_db, student_db, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
     mocker.patch.object(user, 'get_by_user_id', return_value=user_complete_db)
     mocker.patch.object(user, 'updated_user')
+    mocker.patch.object(enroll_course, 'create', return_value=student_db)
     response = test_app.post("/api/v1/courses/2/registration",
                              data=json.dumps(course_registration_json))
     assert response.status_code == 200
-    assert response.json() == course_response_json
+    assert response.json() == enroll_course_response_json
 
 
 # ------------------ Course collaboration ------------------------ #
