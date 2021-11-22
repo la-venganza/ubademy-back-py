@@ -5,3 +5,5 @@ omit =
     app/crud/base.py
     app/crud/crud_lesson.py
     app/crud/crud_user.py
+    app/crud/crud_subscription.py
+    app/crud/crud_enroll_course.py
