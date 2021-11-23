@@ -7,7 +7,7 @@ class SubscriptionBase(BaseModel):
 
 
 class SubscriptionInDBBase(BaseModel):
-    id: str
+    id: int
     title: str
 
     class Config:

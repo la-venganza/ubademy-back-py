@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, HTTPException
 from fastapi.params import Query
 from sqlalchemy.orm import Session
 
@@ -68,6 +68,10 @@ async def update_user(
         db=db, subscription_plan_in=subscription_name)
     user_subscription = crud.user_subscription.get_subscription_by_user_and_subscription(
         db=db, user_id=user.user_id, subscription_id=subscription_plan.id)
+    if not user_subscription:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {user.user_id} does not have or had any {subscription_name} subscription.")
     user_subscription_updated = crud.user_subscription.update(
         db=db, db_obj=user_subscription, obj_in=subscription_in)
     return user_subscription_updated

@@ -39,7 +39,7 @@ enroll_course_response_json = json.loads(
               "active": true, \
               "end_date": null, \
               "subscription": { \
-                "id": "1", \
+                "id": 1, \
                 "title": "Free" \
               }, \
               "start_date": "2021-11-21" \
@@ -77,7 +77,7 @@ enroll_course_db_json = json.loads(
               "active": true, \
               "end_date": null, \
               "subscription": { \
-                "id": "1", \
+                "id": 1, \
                 "title": "Free" \
               }, \
               "start_date": "2021-11-21" \

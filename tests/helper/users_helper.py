@@ -16,7 +16,7 @@ complete_user_info_db_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "1", \
+            "id": 1, \
             "title": "Free" \
           }, \
           "start_date": "2021-11-21" \
@@ -47,7 +47,7 @@ other_user_complete_user_info_db_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "1", \
+            "id": 1, \
             "title": "Free" \
           }, \
           "start_date": "2021-11-21" \
@@ -77,7 +77,7 @@ complete_user_info_expected_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "1", \
+            "id": 1, \
             "title": "Free" \
           }, \
           "start_date": "2021-11-21" \
@@ -117,7 +117,7 @@ basic_user_info_out_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "1", \
+            "id": 1, \
             "title": "Free" \
           }, \
           "start_date": "2021-11-21" \
@@ -229,7 +229,7 @@ complete_user_patched_info_db_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "3", \
+            "id": 3, \
             "title": "Premium" \
           }, \
           "start_date": "2021-11-21" \
@@ -259,7 +259,7 @@ basic_user_patched_info_db_json = json.loads(
           "active": true, \
           "end_date": null, \
           "subscription": { \
-            "id": "3", \
+            "id": 3, \
             "title": "Premium" \
           }, \
           "start_date": "2021-11-21" \
