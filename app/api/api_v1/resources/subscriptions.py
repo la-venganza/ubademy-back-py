@@ -1,4 +1,5 @@
 import logging
+from datetime import date
 from typing import Optional
 
 from fastapi import APIRouter, Depends, status, HTTPException
@@ -30,8 +31,16 @@ async def get_users(
     subscriptions = crud.user_subscription.get_subscriptions_by_user_id(db=db, user_id=user.user_id)
     if active_filter is None:
         return {"results": subscriptions}
-    filter_subscriptions = list(filter(lambda subscription: active_filter == subscription.active, subscriptions))
+    filter_subscriptions = list(filter(lambda subscription:
+                                       filter_by_active_filter(subscription, active_filter),
+                                       subscriptions))
     return {"results": filter_subscriptions}
+
+
+def filter_by_active_filter(subscription, active_filter):
+    return subscription.active and (not subscription.end_date or subscription.end_date > date.today())\
+        if active_filter\
+        else (not subscription.active or (subscription.end_date and subscription.end_date < date.today()))
 
 
 @router_v1.post("/", status_code=status.HTTP_200_OK, response_model=UserSubscriptionBasics)

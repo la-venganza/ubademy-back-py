@@ -1,3 +1,5 @@
+from datetime import date
+
 import pytest
 from starlette.testclient import TestClient
 
@@ -54,7 +56,9 @@ def free_subscription_db():
 
 @pytest.fixture(scope="module")
 def user_subscription_db():
-    return UserSubscription(**user_subscription_info_db_json)
+    user_subscription = UserSubscription(**user_subscription_info_db_json)
+    user_subscription.end_date = date.fromisoformat(user_subscription.end_date)
+    return user_subscription
 
 
 @pytest.fixture(scope="module")
