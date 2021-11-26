@@ -6,7 +6,7 @@ from app.db.base_class import Base, auto_init
 
 class EnrollCourse(Base):
     __tablename__ = 'enroll_course'
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
     user_id = Column(ForeignKey('user_account.user_id'), primary_key=True)
     course_id = Column(ForeignKey('course.id'), primary_key=True)
     active = Column(Boolean, default=True)
@@ -16,6 +16,7 @@ class EnrollCourse(Base):
     grade = Column(Integer, nullable=True)
     course = relationship("Course", back_populates="enrollments")
     user = relationship("UserAccount", back_populates="enroll_courses")
+    exams = relationship("EnrollCourseExam", back_populates="enroll_course")
 
     @auto_init()
     def __init__(self, **_):

@@ -3,6 +3,8 @@
 from app.db.base_class import Base  # noqa
 from app.models.user import UserAccount  # noqa
 from app.models.enroll_course import EnrollCourse  # noqa
+from app.models.enroll_course_exam import EnrollCourseExam  # noqa
+from app.models.answer import Answer  # noqa
 from app.models.user_subscription import UserSubscription  # noqa
 from app.models.subscription import Subscription  # noqa
 from app.models.collaborator import collaborator_table  # noqa

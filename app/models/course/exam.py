@@ -5,7 +5,7 @@ from app.db.base_class import Base, auto_init
 
 
 class Exam(Base):
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, unique=True)
     title = Column(String(100), nullable=False)
     description = Column(String(256), nullable=False)
     minimum_qualification = Column(Integer, nullable=False)

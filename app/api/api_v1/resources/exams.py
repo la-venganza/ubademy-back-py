@@ -59,3 +59,21 @@ async def update_exam(course_id: int, exam_update_rq: ExamUpdateRq,
     )
 
     return exam_updated
+
+
+@router_v1.post("/{exam_id}", status_code=status.HTTP_201_CREATED, response_model=Exam)
+async def exam_answer(
+        exam_in,
+        exam: ExamDb = Depends(course_service.get_exam_by_id),
+) -> dict:
+    """
+    Create an exam
+    """
+    # await course_service.verify_course_with_creator(course_id=course_id, user_id=exam_in.user_id, db=db)
+   
+    # exam_db = crud.exam.create(db=db, obj_in=exam_in.exam)
+    #
+    # lesson.exam = exam_db
+    # crud.lesson.update_lesson(db=db, updated_lesson=lesson)
+
+    return exam
