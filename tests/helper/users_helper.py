@@ -11,7 +11,17 @@ complete_user_info_db_json = json.loads(
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
-      "subscription": "Base", \
+       "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 1, \
+            "title": "Free" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -32,7 +42,17 @@ other_user_complete_user_info_db_json = json.loads(
       "birth_date": null, \
       "phone_type": null, \
       "phone_number": null, \
-      "subscription": "Base", \
+       "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 1, \
+            "title": "Free" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -52,7 +72,17 @@ complete_user_info_expected_json = json.loads(
       "birth_date": null, \
       "phone_type": null, \
       "phone_number": null, \
-      "subscription": "Base", \
+      "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 1, \
+            "title": "Free" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -67,7 +97,6 @@ basic_user_info_in_json = json.loads(
       "first_name": "name", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
-      "subscription": "Base", \
       "role": "Owner", \
       "user_id": "1", \
       "blocked": false \
@@ -83,7 +112,17 @@ basic_user_info_out_json = json.loads(
       "birth_date": null, \
       "phone_type": null, \
       "phone_number": null, \
-      "subscription": "Base", \
+      "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 1, \
+            "title": "Free" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "role": "Owner", \
       "is_admin": true, \
       "user_id": "1", \
@@ -100,7 +139,19 @@ user_info_extra_data_db_json = json.loads(
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
-      "subscription": "Base", \
+      "subscriptions": [ \
+        { \
+          "active": true, \
+          "user_id": "1", \
+          "subscription_id": 1, \
+          "subscription": { \
+            "id": 1, \
+            "title": "Free", \
+            "price": 0 \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "user_id": "1", \
       "blocked": false, \
       "created_courses": [], \
@@ -158,22 +209,32 @@ user_info_extra_data_db_json = json.loads(
 basic_patch_user_info_json = json.loads(
     '{ \
       "birth_date": "1998-01-20", \
-      "subscription": "PREMIUM" \
-    }'
+      "first_name": "name patch"\
+}'
 )
 
 complete_user_patched_info_db_json = json.loads(
     '{ \
       "id": 1, \
       "username" : "username",  \
-      "first_name": "name", \
+      "first_name": "name patch", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
       "role": "Owner", \
       "is_admin": true, \
       "user_id": "1", \
       "birth_date": "1998-01-20", \
-      "subscription": "PREMIUM", \
+       "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 3, \
+            "title": "Premium" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "blocked": false, \
       "created_courses": [], \
       "enroll_courses": [], \
@@ -184,7 +245,7 @@ complete_user_patched_info_db_json = json.loads(
 basic_user_patched_info_db_json = json.loads(
     '{ \
       "username" : "username",  \
-      "first_name": "name", \
+      "first_name": "name patch", \
       "last_name": "lastname", \
       "email": "some@mail.com.ar", \
       "role": "Owner", \
@@ -193,7 +254,17 @@ basic_user_patched_info_db_json = json.loads(
       "phone_type": null, \
       "phone_number": null, \
       "birth_date": "1998-01-20", \
-      "subscription": "PREMIUM", \
+      "subscriptions": [ \
+        { \
+          "active": true, \
+          "end_date": null, \
+          "subscription": { \
+            "id": 3, \
+            "title": "Premium" \
+          }, \
+          "start_date": "2021-11-21" \
+        } \
+      ], \
       "blocked": false \
     }'
 )

@@ -17,7 +17,7 @@ class UserAccount(Base):
     phone_number = Column(String(30), nullable=True)
     email = Column(String, index=True, nullable=False)
     role = Column(String, nullable=True)
-    subscription = Column(String(50), nullable=False)
+    subscriptions = relationship("UserSubscription")
     is_admin = Column(Boolean, default=False)
     blocked = Column(Boolean, default=False)
     creation_date = Column(DateTime(timezone=True), server_default=func.now())

@@ -34,7 +34,17 @@ enroll_course_response_json = json.loads(
             "username": "username", \
             "role": "Owner", \
             "birth_date": "1990-01-21", \
-            "subscription": "Base", \
+            "subscriptions": [ \
+            { \
+              "active": true, \
+              "end_date": null, \
+              "subscription": { \
+                "id": 1, \
+                "title": "Free" \
+              }, \
+              "start_date": "2021-11-21" \
+            } \
+          ], \
             "user_id": "1", \
             "email": "fake@email.com", \
             "blocked": false, \
@@ -62,7 +72,17 @@ enroll_course_db_json = json.loads(
             "username": "username", \
             "role": "Owner", \
             "birth_date": "1990-01-21", \
-            "subscription": "Base", \
+            "subscriptions": [ \
+            { \
+              "active": true, \
+              "end_date": null, \
+              "subscription": { \
+                "id": 1, \
+                "title": "Free" \
+              }, \
+              "start_date": "2021-11-21" \
+            } \
+          ], \
             "user_id": "1", \
             "email": "fake@email.com", \
             "blocked": false, \

@@ -1,12 +1,11 @@
 import json
 
-from app.crud import user
+from app.crud import user, subscription
 from app.models.user import UserAccount
 from tests.helper.users_helper import basic_user_info_in_json, complete_user_info_expected_json, \
     other_complete_db, basic_patch_user_info_json, \
     complete_user_patched_info_db_json, basic_user_patched_info_db_json, basic_user_info_out_json
 
-# user_complete_db = UserAccount(**complete_user_info_db_json)
 user_patched_complete_db = UserAccount(**complete_user_patched_info_db_json)
 
 
@@ -68,9 +67,10 @@ def test_users_ok_filter_email(test_app, user_complete_db, mocker):
 
 
 # ------------------ User post ------------------------ #
-def test_users_create_ok(test_app, user_complete_db, mocker):
+def test_users_create_ok(test_app, user_complete_db, free_subscription_db, mocker):
     mocker.patch.object(user, 'get_by_email', return_value=None)
     mocker.patch.object(user, 'create', return_value=user_complete_db)
+    mocker.patch.object(subscription, 'get_by_subscription_plan', return_value=free_subscription_db)
     response = test_app.post("/api/v1/users/", data=json.dumps(basic_user_info_in_json))
     assert response.status_code == 200
     assert response.json() == basic_user_info_out_json

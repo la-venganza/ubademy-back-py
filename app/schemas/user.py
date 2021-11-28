@@ -4,6 +4,7 @@ from typing import Optional, List
 from pydantic import BaseModel, EmailStr
 
 from app.schemas.course.course import Course
+from app.schemas.user_subscription import UserSubscriptionBasics, UserSubscriptionCreateBase
 
 
 class UserBase(BaseModel):
@@ -14,11 +15,15 @@ class UserBase(BaseModel):
     birth_date: Optional[date]
     phone_type: Optional[str]
     phone_number: Optional[str]
-    subscription: Optional[str] = "Base"
 
 
 # Properties to receive via API on creation
 class UserCreate(UserBase):
+    email: EmailStr
+    subscriptions: List[UserSubscriptionCreateBase]
+
+
+class UserCreateRQ(UserBase):
     email: EmailStr
 
 
@@ -27,6 +32,7 @@ class UserInDBBase(UserBase):
     email: EmailStr
     blocked: bool
     is_admin: bool
+    subscriptions: List[UserSubscriptionBasics]
 
     class Config:
         orm_mode = True
@@ -63,4 +69,3 @@ class UserInDBCompleteBase(User):
 # Properties to receive via API on update
 class UserUpdate(UserBase):
     username: Optional[str]
-    subscription: Optional[str]
