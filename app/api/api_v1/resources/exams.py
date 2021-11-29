@@ -69,7 +69,7 @@ async def exam_answer(
         db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Publish an exam for an enroll student
+    Publish an exam for an enrolled student
     """
     user_id = exam_in.user_id
     enrollment = await course_service.get_user_enrollment(course_id=course_id, user_id=user_id, db=db)
