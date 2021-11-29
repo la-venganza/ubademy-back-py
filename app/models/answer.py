@@ -9,7 +9,6 @@ class Answer(Base):
     enroll_course_exam_id = Column(Integer, ForeignKey('enroll_course_exam.id'))
     question_id = Column(Integer, ForeignKey('question.id'))
     choice_id = Column(Integer, ForeignKey('choice.id'))
-    # type = Column(String(100), nullable=False)
     text = Column(String(500))
     question = relationship(
         "Question",

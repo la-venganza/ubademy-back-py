@@ -13,7 +13,7 @@ class EnrollCourseExam(Base):
     exam_date = Column(DateTime(timezone=True), server_default=func.now())
     grade = Column(Integer, nullable=True)
     enroll_course = relationship("EnrollCourse", back_populates="exams")
-    exams = relationship("Exam")
+    exam = relationship("Exam")
     answers = relationship("Answer")
 
     @auto_init()

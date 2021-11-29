@@ -35,6 +35,13 @@ class EnrollCourse(EnrollCourseInDBBase):
     pass
 
 
+class EnrollCourseBasics(EnrollCourseBase):
+    start_date: date
+
+    class Config:
+        orm_mode = True
+
+
 class EnrollCourseSearchResults(BaseModel):
     results: List[EnrollCourse]
 
