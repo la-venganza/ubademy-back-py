@@ -7,6 +7,7 @@ from app import deps, crud
 from app.schemas.course.exam import Exam, ExamUpdateRq, ExamCreateRq
 from app.models.course import Exam as ExamDb, Lesson
 from app.services import course_service
+from app.schemas.enroll_course_exam import EnrollCourseExamCreate, EnrollCourseExamRQ, EnrollCourseExam
 
 logger = logging.getLogger(__name__)
 
@@ -59,3 +60,24 @@ async def update_exam(course_id: int, exam_update_rq: ExamUpdateRq,
     )
 
     return exam_updated
+
+
+@router_v1.post("/{exam_id}", status_code=status.HTTP_200_OK, response_model=EnrollCourseExam)
+async def exam_answer(
+        course_id: int, lesson_id: int, exam_id: int, exam_in: EnrollCourseExamRQ,
+        exam: ExamDb = Depends(course_service.get_exam_by_id),
+        db: Session = Depends(deps.get_db),
+) -> dict:
+    """
+    Publish an exam for an enrolled student
+    """
+    user_id = exam_in.user_id
+    enrollment = await course_service.get_user_enrollment(course_id=course_id, user_id=user_id, db=db)
+
+    enroll_course_exam = crud.enroll_course_exam.create(
+        db=db,
+        obj_in=EnrollCourseExamCreate(
+            enroll_course_id=enrollment.id, lesson_id=lesson_id, exam_id=exam_id, answers=exam_in.answers)
+    )
+
+    return enroll_course_exam

@@ -22,10 +22,6 @@ class QuestionCreate(QuestionBase):
     exam_id: int
 
 
-class QuestionUpdate(QuestionBase):
-    ...
-
-
 class QuestionInDBBase(QuestionBase):
     id: int
     exam_id: int

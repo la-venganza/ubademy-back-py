@@ -1,6 +1,7 @@
 import json
 
 from app.models.course import Course, Exam
+from app.models.enroll_course_exam import EnrollCourseExam
 
 course_exam_db_json = json.loads(
     '{ \
@@ -305,7 +306,86 @@ exam_patch_invalid_user_json = json.loads(
     }'
 )
 
+exam_publish_json = json.loads(
+    '{  \
+        "user_id" : "1",  \
+        "answers" : [ \
+            { \
+                "question_id": 1, \
+                "input_answer": "answer" \
+            }, \
+                         { \
+                "question_id": 2, \
+                "choice_id": 5 \
+            } \
+        ] \
+    }'
+)
+
+enroll_course_exam_db_json = json.loads(
+    '{  \
+        "id" : 1,  \
+        "enroll_course_id" : 1,  \
+        "lesson_id" : 1,  \
+        "exam_id" : 2,  \
+        "exam_date" : "2021-01-01T13:59:57",  \
+        "grade" : null, \
+        "enroll_course" : \
+        { \
+          "id": 1, \
+          "user_id": "1", \
+          "course_id": 1, \
+          "active": true, \
+          "current_lesson": null, \
+          "grade": null, \
+          "end_date": null, \
+          "start_date": "2020-01-01" \
+        }, \
+        "answers" : [ \
+            { \
+                "id": 1, \
+                "enroll_course_exam_id": 1, \
+                "question_id": 1, \
+                "text": "answer", \
+                "choice_id": null \
+            }, \
+            { \
+                "id": 2, \
+                "enroll_course_exam_id": 1, \
+                "question_id": 2, \
+                "choice_id": 5, \
+                "text": null \
+            } \
+        ] \
+    }'
+)
+
+enroll_course_exam_response_json = json.loads(
+    '{  \
+        "id" : 1,  \
+        "exam_date" : "2021-01-01T13:59:57", \
+        "grade" : null, \
+        "answers" : [ \
+            { \
+                "id": 1, \
+                "enroll_course_exam_id": 1, \
+                "question_id": 1, \
+                "text": "answer", \
+                "choice_id": null \
+            }, \
+            { \
+                "id": 2, \
+                "enroll_course_exam_id": 1, \
+                "question_id": 2, \
+                "choice_id": 5, \
+                "text": null \
+            } \
+        ] \
+    }'
+)
+
 course_exam_db = Course(**course_exam_db_json)
 exam_db = Exam(**exam_db_json)
 exam_db_created = Exam(**exam_to_create_db_json)
 exam_updated_db = Exam(**exam_patch_json.get("exam"))
+enroll_course_exam_db = EnrollCourseExam(**enroll_course_exam_db_json)

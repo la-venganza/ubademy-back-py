@@ -61,7 +61,7 @@ enroll_course_response_json = json.loads(
 enroll_course_db_json = json.loads(
     '{ \
       "id": 1, \
-      "user_id": 1, \
+      "user_id": "1", \
       "course_id": 1, \
       "active": true, \
       "current_lesson": null, \

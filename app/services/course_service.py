@@ -18,10 +18,7 @@ async def get_course_by_id(course_id, db: Session = Depends(get_db)):
 
 
 async def verify_course_with_creator(course_id: int, user_id: str, db: Session = Depends(get_db)):
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
+    course = await get_course_by_id(course_id, db=db)
     if course.creator_id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -63,3 +60,15 @@ async def get_exam_by_id(db: Session = Depends(get_db), course_id: int = 0,
                             detail=f"The exam with id {exam_id} was not found")
 
     return lesson.exam
+
+
+async def get_user_enrollment(course_id: int, user_id: str, db: Session = Depends(get_db)):
+    course = await get_course_by_id(course_id, db=db)
+
+    filtered_enrollments = filter(lambda enrollment_item: user_id == enrollment_item.user_id, course.enrollments)
+    enrollment = next(filtered_enrollments, None)
+
+    if enrollment is None:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail=f"The user with id {user_id} is not enrolled to course {course_id}")
+    return enrollment
