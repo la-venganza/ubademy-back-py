@@ -89,19 +89,19 @@ async def course_collaboration(course_id: int, course_collaboration_rq: CourseCo
     """
     Register a user in a course as a collaborator
     """
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
-
     user_id = course_collaboration_rq.user_id
-    user = await user_service.get_user_by_id(db=db, user_id=user_id)
+    await course_service.verify_course_with_creator(course_id=course_id, user_id=user_id, db=db)
+
+    collaborator_id = course_collaboration_rq.collaborator_id
+    user = await user_service.get_user_by_id(db=db, user_id=collaborator_id)
 
     if any(filter(lambda course: str(course_id) in str(course.id), user.collaborating_courses)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"User {user_id} is already collaborating in course {course_id}")
+                            detail=f"User {collaborator_id} is already collaborating in course {course_id}")
 
-    collaborator_enrollment = crud.collaborator.create(db=db, obj_in=CollaboratorDb(user_id=user_id, course_id=course.id))
+    collaborator_enrollment = crud.collaborator.create(
+        db=db, obj_in=CollaboratorDb(user_id=collaborator_id, course_id=course_id)
+    )
 
     return collaborator_enrollment
 

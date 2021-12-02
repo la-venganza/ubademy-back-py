@@ -109,7 +109,12 @@ collaborator_db_json = json.loads(
     }'
 )
 
-course_collaboration_json = json.loads(
+course_collaboration_rq_json = json.loads(
     '{"user_id" : "1", \
     "collaborator_id": "2"}'
+)
+
+other_course_collaboration_rq_json = json.loads(
+    '{"user_id" : "2", \
+    "collaborator_id": "1"}'
 )
