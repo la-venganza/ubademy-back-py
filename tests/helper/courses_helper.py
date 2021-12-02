@@ -111,12 +111,6 @@ course_to_create_json = json.loads(
     }'
 )
 
-course_registration_json = json.loads(
-    '{"user_id" : "1"}'
-)
-
-course_collaboration_json = course_registration_json
-
 course_patch_json = json.loads(
     '{  \
         "user_id" : "1",  \

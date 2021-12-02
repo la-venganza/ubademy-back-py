@@ -10,6 +10,8 @@ from app.schemas.course.course import CourseCreate, Course, CourseSearchResults,
 from app import deps, crud
 from app.models.enroll_course import EnrollCourse as EnrollCourseDb
 from app.schemas.enroll_course import EnrollCourse
+from app.models.collaborator import Collaborator as CollaboratorDb
+from app.schemas.collaborator import Collaborator
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +83,7 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
     return student_enroll_course
 
 
-@router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)
+@router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Collaborator)
 async def course_collaboration(course_id: int, course_collaboration_rq: CourseCollaboration,
                                db: Session = Depends(deps.get_db),) -> dict:
     """
@@ -99,11 +101,9 @@ async def course_collaboration(course_id: int, course_collaboration_rq: CourseCo
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"User {user_id} is already collaborating in course {course_id}")
 
-    user.collaborating_courses.append(course)
+    collaborator_enrollment = crud.collaborator.create(db=db, obj_in=CollaboratorDb(user_id=user_id, course_id=course.id))
 
-    crud.user.updated_user(db=db, updated_user=user)
-
-    return course
+    return collaborator_enrollment
 
 
 @router_v1.patch("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)
