@@ -7,6 +7,8 @@ from app import crud
 from app.models.course import Exam
 from app.models.course import Lesson
 from app.deps import get_db
+from app.schemas.course_exam import CourseExam
+from app.models.course import Course
 
 
 async def get_course_by_id(course_id, db: Session = Depends(get_db)):
@@ -72,3 +74,30 @@ async def get_user_enrollment(course_id: int, user_id: str, db: Session = Depend
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"The user with id {user_id} is not enrolled to course {course_id}")
     return enrollment
+
+
+async def get_exams_for_teaching_staff(staff_id: str, active_students_filter: bool, graded_status_filter: bool,
+                                       pagination_limit: int, pagination_offset: int, db: Session = Depends(get_db)):
+    courses = crud.course.get_exams_from_courses(
+        db=db, user_id=staff_id, active_students=active_students_filter, graded=graded_status_filter,
+        offset=pagination_offset, limit=pagination_limit
+    )
+    exams = []
+    for course in courses:
+        for enrollment in course.enrollments:
+            for enroll_course_exam in enrollment.exams:
+                exam = CourseExam(
+                        course_id=course.id,
+                        course_title=course.title,
+                        student_id=enrollment.user_id,
+                        student_email=enrollment.user.email,
+                        exam_taken_id=enroll_course_exam.id,
+                        lesson_id=enroll_course_exam.lesson_id,
+                        exam_id=enroll_course_exam.exam_id,
+                        exam_date=enroll_course_exam.exam_date,
+                        active_student=enrollment.active,
+                        exam_grade=enroll_course_exam.grade,
+                        enroll_course_id=enroll_course_exam.enroll_course_id
+                    )
+                exams.append(exam)
+    return exams
