@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app import deps
 from app.schemas.course_exam import CourseExamResults
-from services import course_service
+from app.services import course_service
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,11 @@ async def search_exams(
     db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for exams taken in a course
+    Search for exams taken by students, relevant for course creators/collaborators.
     """
     await pagination_validator(page=page, page_size=page_size)
 
-    course_exams = await course_service.get_exams_for_teaching_staff(
+    course_exams = await course_service.get_exams_for_staff(
         db=db, staff_id=user_id, active_students_filter=active_students,
         graded_status_filter=graded_status, pagination_limit=page_size,
         pagination_offset=(page - 1) * page_size)

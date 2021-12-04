@@ -129,7 +129,7 @@ def test_exams_update_fail_user_is_not_creator(test_app, mocker):
 # ------------------ Publish exam for student by id ------------------------ #
 def test_publish_exam_not_found_no_course(test_app, mocker):
     mocker.patch.object(course, 'get_full_by_course_id', return_value=None)
-    response = test_app.post("/api/v1/courses/1/lessons/1/exams/3", data=json.dumps(exam_publish_json))
+    response = test_app.post("/api/v1/courses/1/lessons/1/exams/3/solution", data=json.dumps(exam_publish_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'Course with id 1 was not found'}
 
@@ -137,7 +137,7 @@ def test_publish_exam_not_found_no_course(test_app, mocker):
 def test_publish_exam_post_fail_no_lesson(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_db)
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_db)
-    response = test_app.post("/api/v1/courses/1/lessons/3/exams/1", data=json.dumps(exam_publish_json))
+    response = test_app.post("/api/v1/courses/1/lessons/3/exams/1/solution", data=json.dumps(exam_publish_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'The lesson with id 3 was not found'}
 
@@ -145,7 +145,7 @@ def test_publish_exam_post_fail_no_lesson(test_app, mocker):
 def test_publish_exam_post_fail_no_exam(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_db)
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_db)
-    response = test_app.post("/api/v1/courses/1/lessons/1/exams/11", data=json.dumps(exam_publish_json))
+    response = test_app.post("/api/v1/courses/1/lessons/1/exams/11/solution", data=json.dumps(exam_publish_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'The exam with id 11 was not found'}
 
@@ -153,7 +153,7 @@ def test_publish_exam_post_fail_no_exam(test_app, mocker):
 def test_publish_exam_post_fail_not_enrolled(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_db)
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_db)
-    response = test_app.post("/api/v1/courses/1/lessons/2/exams/1", data=json.dumps(exam_publish_json))
+    response = test_app.post("/api/v1/courses/1/lessons/2/exams/1/solution", data=json.dumps(exam_publish_json))
     assert response.status_code == 403
     assert response.json() == {'detail': 'The user with id 1 is not enrolled to course 1'}
 
@@ -162,6 +162,6 @@ def test_publish_exam_post_ok(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_with_enrollment_db)
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_with_enrollment_db)
     mocker.patch.object(enroll_course_exam, 'create', return_value=enroll_course_exam_db)
-    response = test_app.post("/api/v1/courses/1/lessons/2/exams/1", data=json.dumps(exam_publish_json))
+    response = test_app.post("/api/v1/courses/1/lessons/2/exams/1/solution", data=json.dumps(exam_publish_json))
     assert response.status_code == 200
     assert response.json() == enroll_course_exam_response_json
