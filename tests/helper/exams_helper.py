@@ -384,8 +384,34 @@ enroll_course_exam_response_json = json.loads(
     }'
 )
 
+exam_publish_grade_json = json.loads(
+    '{  \
+        "user_id": "1", \
+        "exam_to_grade_id": 7, \
+        "enroll_course_id": 1, \
+        "grade": 8 \
+    }'
+)
+
+exam_publish_grade_other_json = json.loads(
+    '{  \
+        "user_id": "2", \
+        "exam_to_grade_id": 7, \
+        "enroll_course_id": 1, \
+        "grade": 8 \
+    }'
+)
+
+exam_publish_grade_invalid_json = json.loads(
+    '{  \
+        "user_id": "1", \
+        "exam_to_grade_id": 7, \
+        "enroll_course_id": 1, \
+        "grade": 11 \
+    }'
+)
+
 course_exam_db = Course(**course_exam_db_json)
 exam_db = Exam(**exam_db_json)
 exam_db_created = Exam(**exam_to_create_db_json)
 exam_updated_db = Exam(**exam_patch_json.get("exam"))
-enroll_course_exam_db = EnrollCourseExam(**enroll_course_exam_db_json)

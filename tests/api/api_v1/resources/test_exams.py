@@ -2,8 +2,9 @@ import json
 
 from tests.helper.courses_helper import course_exam_with_enrollment_db
 from tests.helper.exams_helper import exam_db_created, exam_to_create_json, exam_response_json, \
-    exam_to_create_invalid_user_json, exam_patch_json, exam_patch_invalid_user_json, course_exam_db, exam_publish_json, \
-    enroll_course_exam_db, enroll_course_exam_response_json
+    exam_to_create_invalid_user_json, exam_patch_json, exam_patch_invalid_user_json, course_exam_db, exam_publish_json,\
+    enroll_course_exam_response_json, exam_publish_grade_invalid_json, exam_publish_grade_json, \
+    exam_publish_grade_other_json
 from app.crud import course, exam, lesson, enroll_course_exam
 
 
@@ -158,10 +159,68 @@ def test_publish_exam_post_fail_not_enrolled(test_app, mocker):
     assert response.json() == {'detail': 'The user with id 1 is not enrolled to course 1'}
 
 
-def test_publish_exam_post_ok(test_app, mocker):
+def test_publish_exam_post_ok(test_app, enroll_course_exam_db, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_with_enrollment_db)
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_with_enrollment_db)
     mocker.patch.object(enroll_course_exam, 'create', return_value=enroll_course_exam_db)
     response = test_app.post("/api/v1/courses/1/lessons/2/exams/1/solution", data=json.dumps(exam_publish_json))
+    assert response.status_code == 200
+    assert response.json() == enroll_course_exam_response_json
+
+
+# ------------------ Publish student grade for exam published ------------------------ #
+def test_publish_exam_grade_patch_invalid_grade(test_app, mocker):
+    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_with_enrollment_db)
+    response = test_app.patch("/api/v1/courses/1/lessons/2/exams/1/solution",
+                              data=json.dumps(exam_publish_grade_invalid_json))
+    assert response.status_code == 422
+
+
+def test_publish_exam_grade_patch_invalid_not_staff(test_app, course_with_enrollments_with_exam_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_with_enrollments_with_exam_db)
+    response = test_app.patch("/api/v1/courses/1/lessons/2/exams/1/solution",
+                              data=json.dumps(exam_publish_grade_other_json))
+    assert response.status_code == 403
+    assert response.json() == \
+           {'detail': 'Exams of course with id 1 can only be graded by it\'s creator or a collaborator'}
+
+
+def test_publish_exam_grade_patch_invalid_no_enroll_course_exam(test_app, course_with_enrollments_with_exam_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(enroll_course_exam, 'get', return_value=None)
+    response = test_app.patch("/api/v1/courses/1/lessons/2/exams/1/solution",
+                              data=json.dumps(exam_publish_grade_json))
+    assert response.status_code == 400
+    assert response.json() == \
+           {'detail': 'Some information is invalid. There is no exam to grade for course_id 1, lesson_id 2, '
+                      'exam_id 1, exam_to_grade_id 7 and enroll_course_exam_id 1'}
+
+
+def test_publish_exam_grade_patch_invalid_mismatch_information(
+        test_app, enroll_course_exam_db, course_with_enrollments_with_exam_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(enroll_course_exam, 'get', return_value=enroll_course_exam_db)
+    response = test_app.patch("/api/v1/courses/1/lessons/2/exams/1/solution",
+                              data=json.dumps(exam_publish_grade_json))
+    assert response.status_code == 400
+    assert response.json() == \
+           {'detail': 'Some information is invalid. There is no exam to grade for course_id 1, lesson_id 2, '
+                      'exam_id 1, exam_to_grade_id 7 and enroll_course_exam_id 1'}
+
+
+def test_publish_exam_grade_patch_ok(test_app, enroll_course_exam_db, course_with_enrollments_with_exam_db, mocker):
+    enroll_course_exam_db.id = 7
+    enroll_course_exam_db.exam_id = 1
+    enroll_course_exam_db.lesson_id = 2
+    mocker.patch.object(course, 'get', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_with_enrollments_with_exam_db)
+    mocker.patch.object(enroll_course_exam, 'get', return_value=enroll_course_exam_db)
+    enroll_course_exam_db.id = 1
+    mocker.patch.object(enroll_course_exam, 'update', return_value=enroll_course_exam_db)
+    response = test_app.patch("/api/v1/courses/1/lessons/2/exams/1/solution",
+                              data=json.dumps(exam_publish_grade_json))
     assert response.status_code == 200
     assert response.json() == enroll_course_exam_response_json
