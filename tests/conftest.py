@@ -9,7 +9,7 @@ from app.models.course import Course
 from app.models.enroll_course import EnrollCourse
 from app.models.subscription import Subscription
 from app.models.user_subscription import UserSubscription
-from tests.helper.courses_helper import course_db_json
+from tests.helper.courses_helper import course_db_json, course_exam_with_enrollment_with_exams_db_json
 from tests.helper.exams_helper import course_exam_db_json
 from tests.helper.enroll_course_helper import enroll_course_db_json
 from tests.helper.user_subscription_helpler import user_subscription_info_db_json,\
@@ -64,3 +64,8 @@ def user_subscription_db():
 @pytest.fixture(scope="module")
 def user_inactive_subscription_db():
     return UserSubscription(**user_subscription_inactive_db_json)
+
+
+@pytest.fixture(scope="module")
+def course_with_enrollments_with_exam_db():
+    return Course(**course_exam_with_enrollment_with_exams_db_json)

@@ -6,7 +6,7 @@ from fastapi.encoders import jsonable_encoder
 
 from app.services import course_service
 from app.crud import course
-from tests.helper.courses_helper import lesson_db_of_course_json
+from tests.helper.courses_helper import lesson_db_of_course_json, search_exams_response_json
 
 
 @pytest.mark.asyncio
@@ -141,3 +141,39 @@ async def test_get_exam_by_id_exam_ok(course_with_exam_db, mocker):
     assert exam.description == "description"
     assert exam.minimum_qualification == 6
 
+
+@pytest.mark.asyncio
+async def test_get_exams_for_staff_empty(mocker):
+    mocker.patch.object(course, 'get_exams_from_courses', return_value=[])
+    db_session = MagicMock()
+    exams = await course_service.get_exams_for_staff(
+        staff_id="1", active_students_filter=True, graded_status_filter=True, db=db_session,
+        pagination_limit=1, pagination_offset=1)
+    assert exams == []
+
+
+@pytest.mark.asyncio
+async def test_get_exams_for_staff_ok(course_with_enrollments_with_exam_db, mocker):
+    mocker.patch.object(course, 'get_exams_from_courses', return_value=[course_with_enrollments_with_exam_db])
+    db_session = MagicMock()
+    exams = await course_service.get_exams_for_staff(
+        staff_id="1", active_students_filter=True, graded_status_filter=True, db=db_session,
+        pagination_limit=1, pagination_offset=1)
+    assert len(exams) == 1
+    assert jsonable_encoder(exams) == [search_exams_response_json]
+
+
+@pytest.mark.asyncio
+async def test_verify_course_staff_false(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    verified = await course_service.verify_course_staff(user_id="2", course_id=1, db=db_session)
+    assert not verified
+
+
+@pytest.mark.asyncio
+async def test_verify_course_staff_true(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    verified = await course_service.verify_course_staff(user_id="1", course_id=1, db=db_session)
+    assert verified
