@@ -16,7 +16,7 @@ router_v1 = APIRouter()
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=CourseExamResults)
 async def search_exams(
     *,
-    user_id: str = Query(None, example="someUserId"),
+    user_id: str = Query(..., example="someUserId"),
     active_students: Optional[bool] = Query(None, example="false"),
     graded_status: Optional[bool] = Query(None, example="false"),
     page_size: Optional[int] = 10,

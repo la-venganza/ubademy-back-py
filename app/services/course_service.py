@@ -90,6 +90,7 @@ async def get_exams_for_staff(staff_id: str, active_students_filter: bool, grade
                         course_title=course.title,
                         student_id=enrollment.user_id,
                         student_email=enrollment.user.email,
+                        student_username=enrollment.user.username,
                         exam_taken_id=enroll_course_exam.id,
                         lesson_id=enroll_course_exam.lesson_id,
                         exam_id=enroll_course_exam.exam_id,

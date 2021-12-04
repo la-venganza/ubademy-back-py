@@ -9,6 +9,7 @@ class CourseExam(BaseModel):
     course_title: str
     student_id: str
     student_email: EmailStr
+    student_username: str
     active_student: bool
     exam_taken_id: int
     exam_date: datetime
