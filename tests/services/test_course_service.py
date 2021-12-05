@@ -52,7 +52,7 @@ async def test_verify_course_with_creator_course_ok(course_db, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
     db_session = MagicMock()
     response = await course_service.verify_course_with_creator(course_id=1, user_id="1", db=db_session)
-    assert response == True
+    assert response
 
 
 @pytest.mark.asyncio

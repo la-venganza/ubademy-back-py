@@ -20,7 +20,7 @@ router_v1 = APIRouter()
 
 
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSubscriptionSearchResults)
-async def get_users(
+async def get_user_subscriptions(
         active_filter: Optional[bool] = Query(None, example="false"),
         user: UserAccount = Depends(user_service.get_user_by_id),
         db: Session = Depends(deps.get_db),
@@ -30,7 +30,9 @@ async def get_users(
     """
     subscriptions = crud.user_subscription.get_subscriptions_by_user_id(db=db, user_id=user.user_id)
     if active_filter is None:
-        return {"results": subscriptions}
+        current_subscription = subscription_service.get_current_subscription(
+            list(filter(lambda subscription: filter_by_active_filter(subscription, True), subscriptions)))
+        return {"results": [current_subscription] if current_subscription else []}
     filter_subscriptions = list(filter(lambda subscription:
                                        filter_by_active_filter(subscription, active_filter),
                                        subscriptions))

@@ -1,4 +1,5 @@
 from datetime import date
+from typing import List
 
 from fastapi import HTTPException, status, Depends
 from sqlalchemy.orm import Session
@@ -6,6 +7,7 @@ from sqlalchemy.orm import Session
 from app import crud
 from app.deps import get_db
 from app.schemas.user_subscription import UserSubscriptionCreate, UserSubscriptionUpdate
+from app.models.user_subscription import UserSubscription
 
 
 async def get_subscription_by_subscription_plan(subscription_plan_in: str, db: Session = Depends(get_db)):
@@ -35,3 +37,24 @@ async def create_or_update_subscription_for_user(
             detail=f"Subscription for user {user_id} already exists and is active until {db_subscription.end_date}")
     return crud.user_subscription.update(
         db=db, db_obj=db_subscription, obj_in=UserSubscriptionUpdate(active=True, end_date=end_date))
+
+
+def get_current_subscription(user_subscriptions: List[UserSubscription]):
+    current_subscription = None
+    if len(user_subscriptions) == 1:
+        current_subscription = user_subscriptions[0]
+    current_subscription = find_subscription_by_name(
+        user_subscriptions=user_subscriptions, subscription_name="premium")
+    if not current_subscription:
+        current_subscription = find_subscription_by_name(
+            user_subscriptions=user_subscriptions, subscription_name="gold")
+    # This should never happen. It should return free in first len scenario
+    if not current_subscription:
+        current_subscription = find_subscription_by_name(
+            user_subscriptions=user_subscriptions, subscription_name="free")
+    return current_subscription
+
+
+def find_subscription_by_name(user_subscriptions: List[UserSubscription], subscription_name: str):
+    return next((user_subscription for user_subscription in user_subscriptions if
+                 (user_subscription.subscription.title.lower() == subscription_name.lower())), None)

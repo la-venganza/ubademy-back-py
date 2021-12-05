@@ -23,7 +23,7 @@ def test_exams_create_fail_no_course(test_app, mocker):
     mocker.patch.object(course, 'get_full_by_course_id', return_value=None)
     response = test_app.post("/api/v1/courses/1/lessons/1/exams/", data=json.dumps(exam_to_create_json))
     assert response.status_code == 404
-    assert response.json() =={'detail': 'Course with id 1 was not found'}
+    assert response.json() == {'detail': 'Course with id 1 was not found'}
 
 
 def test_exams_create_fail_no_lesson(test_app, mocker):
@@ -31,7 +31,7 @@ def test_exams_create_fail_no_lesson(test_app, mocker):
     mocker.patch.object(course, 'get_full_by_course_id', return_value=course_exam_db)
     response = test_app.post("/api/v1/courses/1/lessons/3/exams/", data=json.dumps(exam_to_create_json))
     assert response.status_code == 404
-    assert response.json() =={'detail': 'The lesson with id 3 was not found'}
+    assert response.json() == {'detail': 'The lesson with id 3 was not found'}
 
 
 def test_exams_create_fail_lesson_already_has_an_exam(test_app, mocker):
@@ -40,7 +40,7 @@ def test_exams_create_fail_lesson_already_has_an_exam(test_app, mocker):
 
     response = test_app.post("/api/v1/courses/1/lessons/2/exams/", data=json.dumps(exam_to_create_json))
     assert response.status_code == 400
-    assert response.json() =={'detail': 'An exam already exists for lesson 2 and course 1'}
+    assert response.json() == {'detail': 'An exam already exists for lesson 2 and course 1'}
 
 
 def test_exams_create_fail_user_is_not_creator(test_app, mocker):
@@ -50,7 +50,7 @@ def test_exams_create_fail_user_is_not_creator(test_app, mocker):
     mocker.patch.object(lesson, 'update_lesson')
     response = test_app.post("/api/v1/courses/1/lessons/1/exams/", data=json.dumps(exam_to_create_invalid_user_json))
     assert response.status_code == 403
-    assert response.json() =={'detail': 'Course with id 1 can only be edited by it\'s creator'}
+    assert response.json() == {'detail': 'Course with id 1 can only be edited by it\'s creator'}
 
 
 # ------------------ Exam get by id ------------------------ #
