@@ -7,7 +7,8 @@ from app import deps, crud
 from app.schemas.course.exam import Exam, ExamUpdateRq, ExamCreateRq
 from app.models.course import Exam as ExamDb, Lesson
 from app.services import course_service
-from app.schemas.enroll_course_exam import EnrollCourseExamCreate, EnrollCourseExamRQ, EnrollCourseExam
+from app.schemas.enroll_course_exam import EnrollCourseExamCreate, EnrollCourseExamRQ, EnrollCourseExam, \
+    EnrollCourseExamGradingRQ, EnrollCourseExamUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ async def update_exam(course_id: int, exam_update_rq: ExamUpdateRq,
     return exam_updated
 
 
-@router_v1.post("/{exam_id}", status_code=status.HTTP_200_OK, response_model=EnrollCourseExam)
+@router_v1.post("/{exam_id}/solution", status_code=status.HTTP_200_OK, response_model=EnrollCourseExam)
 async def exam_answer(
         course_id: int, lesson_id: int, exam_id: int, exam_in: EnrollCourseExamRQ,
         exam: ExamDb = Depends(course_service.get_exam_by_id),
@@ -79,5 +80,41 @@ async def exam_answer(
         obj_in=EnrollCourseExamCreate(
             enroll_course_id=enrollment.id, lesson_id=lesson_id, exam_id=exam_id, answers=exam_in.answers)
     )
+
+    return enroll_course_exam
+
+
+@router_v1.patch("/{exam_id}/solution", status_code=status.HTTP_200_OK, response_model=EnrollCourseExam)
+async def exam_correction(
+        course_id: int, lesson_id: int, exam_id: int, graded_exam_in: EnrollCourseExamGradingRQ,
+        exam: ExamDb = Depends(course_service.get_exam_by_id),
+        db: Session = Depends(deps.get_db),
+) -> dict:
+    """
+    Publish grade for a student exam.
+    """
+    user_id = graded_exam_in.user_id
+    exam_to_grade_id = graded_exam_in.exam_to_grade_id
+    logger.info(f"Attempting to grade exam {exam_to_grade_id} by user {user_id} of course {course_id}")
+    staff_verified = await course_service.verify_course_staff(course_id=course_id, user_id=user_id, db=db)
+    if not staff_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Exams of course with id {course_id} can only be graded by it's creator or a collaborator"
+        )
+    enroll_course_exam = crud.enroll_course_exam.get(db=db, id=exam_to_grade_id)
+    if not enroll_course_exam or \
+            not (
+                    enroll_course_exam.enroll_course_id == graded_exam_in.enroll_course_id
+                    and enroll_course_exam.lesson_id == lesson_id and enroll_course_exam.exam_id == exam_id
+            ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Some information is invalid. There is no exam to grade for course_id {course_id},"
+                   f" lesson_id {lesson_id}, exam_id {exam_id}, exam_to_grade_id {exam_to_grade_id}"
+                   f" and enroll_course_exam_id {graded_exam_in.enroll_course_id}"
+        )
+    enroll_course_exam = crud.enroll_course_exam.update(
+        db=db, db_obj=enroll_course_exam, obj_in=EnrollCourseExamUpdate(grade=graded_exam_in.grade))
 
     return enroll_course_exam

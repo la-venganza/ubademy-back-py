@@ -27,6 +27,7 @@ class CourseRegistration(BaseModel):
 
 class CourseCollaboration(BaseModel):
     user_id: str
+    collaborator_id: str
 
 
 class CourseUpdate(BaseModel):

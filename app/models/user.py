@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date, func
 from sqlalchemy.orm import relationship
 
 from app.db.base_class import Base, auto_init
-from app.models.collaborator import collaborator_table
 
 
 class UserAccount(Base):
@@ -28,10 +27,7 @@ class UserAccount(Base):
         uselist=True,
     )
     enroll_courses = relationship("EnrollCourse", back_populates="user")
-    collaborating_courses = relationship(
-        "Course",
-        secondary=collaborator_table,
-        back_populates="collaborators")
+    collaborating_courses = relationship("Collaborator", back_populates="user")
 
     @auto_init()
     def __init__(self, **_):

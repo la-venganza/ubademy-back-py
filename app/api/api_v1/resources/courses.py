@@ -10,6 +10,8 @@ from app.schemas.course.course import CourseCreate, Course, CourseSearchResults,
 from app import deps, crud
 from app.models.enroll_course import EnrollCourse as EnrollCourseDb
 from app.schemas.enroll_course import EnrollCourse
+from app.models.collaborator import Collaborator as CollaboratorDb
+from app.schemas.collaborator import Collaborator
 
 logger = logging.getLogger(__name__)
 
@@ -81,29 +83,27 @@ async def course_registration(course_id: int, course_registration_rq: CourseRegi
     return student_enroll_course
 
 
-@router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Course)
+@router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Collaborator)
 async def course_collaboration(course_id: int, course_collaboration_rq: CourseCollaboration,
                                db: Session = Depends(deps.get_db),) -> dict:
     """
     Register a user in a course as a collaborator
     """
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
-
     user_id = course_collaboration_rq.user_id
-    user = await user_service.get_user_by_id(db=db, user_id=user_id)
+    await course_service.verify_course_with_creator(course_id=course_id, user_id=user_id, db=db)
+
+    collaborator_id = course_collaboration_rq.collaborator_id
+    user = await user_service.get_user_by_id(db=db, user_id=collaborator_id)
 
     if any(filter(lambda course: str(course_id) in str(course.id), user.collaborating_courses)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"User {user_id} is already collaborating in course {course_id}")
+                            detail=f"User {collaborator_id} is already collaborating in course {course_id}")
 
-    user.collaborating_courses.append(course)
+    collaborator_enrollment = crud.collaborator.create(
+        db=db, obj_in=CollaboratorDb(user_id=collaborator_id, course_id=course_id)
+    )
 
-    crud.user.updated_user(db=db, updated_user=user)
-
-    return course
+    return collaborator_enrollment
 
 
 @router_v1.patch("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)

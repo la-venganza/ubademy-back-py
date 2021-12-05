@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.schemas.enroll_course import EnrollCourse, EnrollCourseBasics
 from app.schemas.answer import Answer, AnswerBase, AnswerExamRQ, AnswerBasics
@@ -23,6 +23,13 @@ class EnrollCourseExamCreate(EnrollCourseExamBase):
 class EnrollCourseExamRQ(BaseModel):
     user_id: str
     answers: List[AnswerExamRQ]
+
+
+class EnrollCourseExamGradingRQ(BaseModel):
+    user_id: str
+    exam_to_grade_id: int
+    enroll_course_id: int
+    grade: int = Field(..., ge=0, le=10, )
 
 
 class EnrollCourseExamInDBBase(EnrollCourseExamBase):
@@ -52,5 +59,5 @@ class EnrollCourseExamSearchResults(BaseModel):
 
 
 # Properties to receive via API on update
-class EnrollCourseExamUpdate(EnrollCourseExamBase):
+class EnrollCourseExamUpdate(BaseModel):
     grade: Optional[int]

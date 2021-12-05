@@ -11,3 +11,9 @@ def test_crud_course_patch(course_db):
     db_session = MagicMock()
 
     course.patch_course(db=db_session, course_to_update=course_patch, course_db_data=course_db)
+
+
+def test_crud_course_get_exams_from_courses(course_db):
+    db_session = MagicMock()
+
+    course.get_exams_from_courses(db=db_session, user_id="user_id", active_students=True, graded=True)

@@ -1,10 +1,8 @@
 import json
 
-enroll_course_response_json = json.loads(
+collaborator_response_json = json.loads(
     '{ \
-        "current_lesson": null, \
         "end_date": null, \
-        "grade": null, \
         "active": true, \
         "start_date": "2020-01-01", \
         "course": { \
@@ -58,14 +56,12 @@ enroll_course_response_json = json.loads(
 
 )
 
-enroll_course_db_json = json.loads(
+collaborator_db_json = json.loads(
     '{ \
       "id": 1, \
       "user_id": "1", \
       "course_id": 1, \
       "active": true, \
-      "current_lesson": null, \
-      "grade": null, \
       "end_date": null, \
       "user": { \
             "id": 1, \
@@ -113,6 +109,12 @@ enroll_course_db_json = json.loads(
     }'
 )
 
-course_registration_json = json.loads(
-    '{"user_id" : "1"}'
+course_collaboration_rq_json = json.loads(
+    '{"user_id" : "1", \
+    "collaborator_id": "2"}'
+)
+
+other_course_collaboration_rq_json = json.loads(
+    '{"user_id" : "2", \
+    "collaborator_id": "1"}'
 )
