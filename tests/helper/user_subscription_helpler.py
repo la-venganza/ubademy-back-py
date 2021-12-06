@@ -30,6 +30,18 @@ user_subscription_response_json = json.loads(
     }'
 )
 
+user_subscription_premium_response_json = json.loads(
+    '{ \
+      "active": true, \
+      "start_date": "2021-11-21", \
+      "end_date": "2022-11-21", \
+       "subscription": { \
+            "id": 3, \
+            "title": "Premium"\
+      } \
+    }'
+)
+
 user_subscription_inactive_db_json = json.loads(
     '{ \
       "id": 1, \
@@ -62,6 +74,14 @@ gold_subscription_db_json = json.loads(
     }'
 )
 
+premium_subscription_db_json = json.loads(
+    '{ \
+        "id": 3, \
+        "title": "Premium", \
+        "price": 50 \
+    }'
+)
+
 user_subscription_create_invalid_subscription_json = json.loads(
     '{ \
         "subscription": "Free", \
@@ -91,4 +111,5 @@ user_subscription_update_json = json.loads(
 )
 
 gold_subscription_db = Subscription(**gold_subscription_db_json)
+premium_subscription_db = Subscription(**premium_subscription_db_json)
 
