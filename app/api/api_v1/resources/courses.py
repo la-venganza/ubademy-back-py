@@ -5,13 +5,14 @@ from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.services import course_service, user_service
-from app.schemas.course.course import CourseCreate, Course, CourseSearchResults, \
+from app.schemas.course.course import CourseCreate, CourseCreateRQ, Course, CourseSearchResults, \
     CourseRegistration, CourseCollaboration, CourseUpdateRq
 from app import deps, crud
 from app.models.enroll_course import EnrollCourse as EnrollCourseDb
 from app.schemas.enroll_course import EnrollCourse
 from app.models.collaborator import Collaborator as CollaboratorDb
 from app.schemas.collaborator import Collaborator
+from app.services import subscription_service
 
 logger = logging.getLogger(__name__)
 
@@ -40,12 +41,25 @@ async def search_courses(
 
 
 @router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
-async def create_course(course_in: CourseCreate, db: Session = Depends(deps.get_db),) -> dict:
-    user_id = course_in.creator_id
+async def create_course(course_in: CourseCreateRQ, db: Session = Depends(deps.get_db),) -> dict:
+    user_id = course_in.user_id
     await user_service.get_user_by_id(db=db, user_id=user_id)
 
-    course = crud.course.create(db=db, obj_in=course_in)
+    subscription_required = await subscription_service.get_subscription_by_subscription_plan(
+        subscription_plan_in=course_in.subscription_required, db=db
+    )
 
+    course = crud.course.create(db=db,
+                                obj_in=CourseCreate(
+                                    title=course_in.title,
+                                    description=course_in.description,
+                                    type=course_in.type,
+                                    hashtags=course_in.hashtags,
+                                    location=course_in.location,
+                                    lessons=course_in.lessons,
+                                    creator_id=course_in.user_id,
+                                    subscription_id_required=subscription_required.id)
+                                )
     return course
 
 

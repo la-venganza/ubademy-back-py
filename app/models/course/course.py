@@ -5,10 +5,11 @@ from app.db.base_class import Base, auto_init
 
 
 class Course(Base):
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True, unique=True)
     title = Column(String(256), nullable=False)
     description = Column(String(256), nullable=True)
     type = Column(String(50), nullable=False)
+    subscription_id_required = Column(ForeignKey('subscription.id'), primary_key=True)
     location = Column(String(100), nullable=True)
     hashtags = Column(String(256), index=True, nullable=False)
     creation_date = Column(DateTime(timezone=True), server_default=func.now())
@@ -21,6 +22,7 @@ class Course(Base):
         cascade="all, delete",
         passive_deletes=True
     )
+    subscription_required = relationship("Subscription")
 
     @auto_init()
     def __init__(self, **_):

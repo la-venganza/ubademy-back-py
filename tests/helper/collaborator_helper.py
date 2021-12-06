@@ -26,7 +26,12 @@ collaborator_response_json = json.loads(
             } \
           ], \
           "id": 1, \
-          "creator_id": "1" \
+          "creator_id": "1", \
+          "subscription_id_required": 1, \
+           "subscription_required": { \
+                "id": 1, \
+                "title": "Free"\
+             } \
         }, \
         "user": { \
             "username": "username", \
@@ -103,7 +108,13 @@ collaborator_db_json = json.loads(
             } \
           ], \
           "id": 1, \
-          "creator_id": "1" \
+          "creator_id": "1", \
+          "subscription_id_required": 1, \
+           "subscription_required": { \
+                "id": 1, \
+                "title": "Free",\
+                "price": 0\
+            } \
         }, \
       "start_date": "2020-01-01" \
     }'

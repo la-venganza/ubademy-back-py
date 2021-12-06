@@ -28,7 +28,12 @@ enroll_course_response_json = json.loads(
             } \
           ], \
           "id": 1, \
-          "creator_id": "1" \
+          "creator_id": "1", \
+          "subscription_id_required": 1, \
+           "subscription_required": { \
+                "id": 1, \
+                "title": "Free"\
+          } \
         }, \
         "user": { \
             "username": "username", \
@@ -107,7 +112,12 @@ enroll_course_db_json = json.loads(
             } \
           ], \
           "id": 1, \
-          "creator_id": "1" \
+          "creator_id": "1", \
+          "subscription_id_required": 1, \
+           "subscription_required": { \
+                "id": 1, \
+                "title": "Free"\
+          } \
         }, \
       "start_date": "2020-01-01" \
     }'

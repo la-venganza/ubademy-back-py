@@ -22,8 +22,14 @@ course_db_json = json.loads(
         } \
       ], \
       "id": 1, \
-      "creator_id": "1" \
-    }'
+      "creator_id": "1", \
+      "subscription_id_required": 1, \
+      "subscription_required": { \
+            "id": 1, \
+            "title": "Free",\
+            "price": 0\
+      } \
+}'
 )
 
 lesson_db_of_course_json = json.loads(
@@ -62,7 +68,12 @@ course_response_json = json.loads(
         } \
       ], \
       "id": 1, \
-      "creator_id": "1" \
+      "creator_id": "1", \
+      "subscription_id_required": 1, \
+       "subscription_required": { \
+            "id": 1, \
+            "title": "Free"\
+      } \
     }'
 )
 
