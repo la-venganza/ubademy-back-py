@@ -59,11 +59,23 @@ class UserEnrollCourseInDBBase(BaseModel):
         orm_mode = True
 
 
+class CollaboratorUserBasics(BaseModel):
+    user_id: str
+    course_id: int
+    course: Course
+    active: bool
+    end_date: Optional[date] = None
+    start_date: date
+
+    class Config:
+        orm_mode = True
+
+
 # Additional ...
 class UserInDBCompleteBase(User):
     created_courses: List[Course]
     enroll_courses: List[UserEnrollCourseInDBBase]
-    collaborating_courses: List[Course]
+    collaborating_courses: List[CollaboratorUserBasics]
 
 
 # Properties to receive via API on update
