@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 
 from app.schemas.course.lesson import LessonBase, Lesson, LessonUpdate
+from app.schemas.subscription import SubscriptionTitle, SubscriptionBasics
 
 
 class CourseBase(BaseModel):
@@ -12,13 +13,25 @@ class CourseBase(BaseModel):
     hashtags: str
     location: str
     lessons: List[LessonBase]
+    subscription_id_required: int
 
     class Config:
         orm_mode = True
 
 
 class CourseCreate(CourseBase):
-    creator_id: str = Field(alias="user_id")
+    creator_id: str
+
+
+class CourseCreateRQ(BaseModel):
+    title: str
+    description: str
+    type: str
+    hashtags: str
+    location: str
+    lessons: List[LessonBase]
+    user_id: str
+    subscription_required: Optional[str] = SubscriptionTitle.free
 
 
 class CourseRegistration(BaseModel):
@@ -37,6 +50,7 @@ class CourseUpdate(BaseModel):
     hashtags: Optional[str]
     location: Optional[str]
     lessons: Optional[List[LessonUpdate]]
+    subscription_id_required: Optional[int] = Field(ge=1, le=3)
 
     class Config:
         orm_mode = True
@@ -52,6 +66,7 @@ class CourseInDBBase(CourseBase):
     id: int
     creator_id: str
     lessons: List[Lesson]
+    subscription_required: SubscriptionBasics
 
     class Config:
         orm_mode = True

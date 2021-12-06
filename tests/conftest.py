@@ -41,6 +41,15 @@ def course_db():
 
 
 @pytest.fixture(scope="module")
+def course_gold_db():
+    course = Course(**course_db_json)
+    course.subscription_required.id = 2
+    course.subscription_required.title = "Gold"
+    course.subscription_id_required = 2
+    return course
+
+
+@pytest.fixture(scope="module")
 def course_with_exam_db():
     return Course(**course_exam_db_json)
 
