@@ -8,7 +8,7 @@ collaborator_response_json = json.loads(
         "course": { \
           "title": "Curso Java", \
           "description": "Venis a aprender", \
-          "type": "DEV", \
+          "type": "Programming", \
           "hashtags": "java, whatsapp, back, develop", \
           "location": "internet", \
           "lessons": [ \
@@ -92,7 +92,7 @@ collaborator_db_json = json.loads(
       "course": { \
           "title": "Curso Java", \
           "description": "Venis a aprender", \
-          "type": "DEV", \
+          "type": "Programming", \
           "hashtags": "java, whatsapp, back, develop", \
           "location": "internet", \
           "lessons": [ \

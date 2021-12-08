@@ -14,6 +14,12 @@ class CRUDSubscription:
     def get_by_subscription_plan(self, db: Session, *, subscription_plan: str) -> Optional[Subscription]:
         return db.query(Subscription).filter(func.lower(Subscription.title) == func.lower(subscription_plan)).first()
 
+    def get(self, db: Session, id: int) -> Optional[Subscription]:
+        return db.query(Subscription).filter(Subscription.id == id).first()
+
+    def get_multi(self, db: Session, *, offset: int = 0, limit: int = 100) -> List[Subscription]:
+        return db.query(Subscription).offset(offset).limit(limit).all()
+
 
 subscription = CRUDSubscription()
 

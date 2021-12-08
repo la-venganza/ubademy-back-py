@@ -1,15 +1,18 @@
 from typing import Optional, List
 
 from fastapi.encoders import jsonable_encoder
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload, contains_eager
 from sqlalchemy.sql.elements import or_
 
 from app.crud.base import CRUDBase
 from app.models.course.course import Course
-from app.schemas.course.course import CourseCreate, CourseUpdate, Course as CoursePydantic
+from app.schemas.course.course import CourseCreate, CourseUpdate, Course as CoursePydantic, CourseType
 from app.models.collaborator import Collaborator
 from app.models.enroll_course import EnrollCourse
 from app.models.enroll_course_exam import EnrollCourseExam
+from app.schemas.subscription import SubscriptionTitle
+from app.models.subscription import Subscription
 
 
 class CRUDCourse(CRUDBase[Course, CourseCreate, CourseUpdate]):
@@ -32,6 +35,16 @@ class CRUDCourse(CRUDBase[Course, CourseCreate, CourseUpdate]):
             query = query.filter(EnrollCourse.active == active_students)
         query = query.offset(offset).limit(limit)
         return query.all()
+
+    def get_courses_with_filters(self, db: Session, *, category_filter: CourseType, plan_filter: SubscriptionTitle,
+                                 offset: int = 0, limit: int = 100) -> List[Course]:
+        query = db.query(Course)
+        if category_filter is not None:
+            query = query.filter(func.lower(Course.type) == func.lower(category_filter.title()))
+        if plan_filter is not None:
+            query = query.join(Course.subscription_required)\
+                .filter(func.lower(Subscription.title) == func.lower(plan_filter.title()))
+        return query.offset(offset).limit(limit).all()
 
     def patch_course(
         self,
