@@ -3,6 +3,7 @@ from app.crud import subscription
 from app.schemas.subscription import SubscriptionTitle
 from tests.helper.user_subscription_helpler import free_subscription_db_json
 
+
 # ------------------ User subscription plan get by id ------------------------ #
 def test_subscription_plan_get_subscription_plans_none(test_app, mocker):
     mocker.patch.object(subscription, 'get_multi', return_value=[])
