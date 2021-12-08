@@ -6,7 +6,7 @@ course_db_json = json.loads(
     '{ \
       "title": "Curso Java", \
       "description": "Venis a aprender", \
-      "type": "DEV", \
+      "type": "Programming", \
       "hashtags": "java, whatsapp, back, develop", \
       "location": "internet", \
       "lessons": [ \
@@ -50,7 +50,7 @@ course_response_json = json.loads(
     '{ \
       "title": "Curso Java", \
       "description": "Venis a aprender", \
-      "type": "DEV", \
+      "type": "Programming", \
       "hashtags": "java, whatsapp, back, develop", \
       "location": "internet", \
       "lessons": [ \
@@ -81,7 +81,7 @@ other_course_db_json = json.loads(
     '{ \
       "title": "Curso fake", \
       "description": "descripcion", \
-      "type": "DEV", \
+      "type": "Programming", \
       "hashtags": "nothing, interesting, water", \
       "location": "internet", \
       "lessons": [ \
@@ -105,7 +105,7 @@ course_to_create_json = json.loads(
     '{ \
       "title": "Curso Java", \
       "description": "Venis a aprender", \
-      "type": "DEV", \
+      "type": "Programming", \
       "hashtags": "java, whatsapp, back, develop", \
       "location": "internet", \
       "lessons": [ \
@@ -128,7 +128,7 @@ course_patch_json = json.loads(
         "course" : { \
           "title": "Curso Java", \
           "description": "Venis a aprender", \
-          "type": "DEV", \
+          "type": "Programming", \
           "hashtags": "java, whatsapp, back, develop", \
           "location": "internet", \
           "lessons": [ \

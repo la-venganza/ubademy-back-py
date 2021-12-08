@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from aenum import Enum
 
 from typing import List, Optional
 
@@ -6,10 +7,40 @@ from app.schemas.course.lesson import LessonBase, Lesson, LessonUpdate
 from app.schemas.subscription import SubscriptionTitle, SubscriptionBasics
 
 
+class CourseType(str, Enum):
+    programming = "Programming"
+    music = "Music"
+    cooking = "Cooking"
+    mindfulness = "Mindfulness"
+    economy = "Economy"
+    art = "Art"
+    language = "Language"
+
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+
+    @classmethod
+    def _missing_value_(cls, name):
+        for member in cls:
+            if member.name.lower() == name.lower():
+                return member
+
+    @classmethod
+    def _missing_name_(cls, name):
+        for member in cls:
+            if member.name.lower() == name.lower():
+                return member
+
+
+class CourseTypeResults(BaseModel):
+    course_types: List[str]
+
+
 class CourseBase(BaseModel):
     title: str
     description: str
-    type: str
+    type: CourseType
     hashtags: str
     location: str
     lessons: List[LessonBase]
@@ -26,7 +57,7 @@ class CourseCreate(CourseBase):
 class CourseCreateRQ(BaseModel):
     title: str
     description: str
-    type: str
+    type: CourseType
     hashtags: str
     location: str
     lessons: List[LessonBase]
@@ -46,11 +77,11 @@ class CourseCollaboration(BaseModel):
 class CourseUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
-    type: Optional[str]
+    type: Optional[CourseType]
     hashtags: Optional[str]
     location: Optional[str]
     lessons: Optional[List[LessonUpdate]]
-    subscription_id_required: Optional[int] = Field(ge=1, le=3)
+    subscription_id_required: Optional[int] = Field(ge=1, le=10)
 
     class Config:
         orm_mode = True

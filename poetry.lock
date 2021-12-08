@@ -1,4 +1,12 @@
 [[package]]
+name = "aenum"
+version = "3.1.5"
+description = "Advanced Enumerations (compatible with Python's stdlib Enum), NamedTuples, and NamedConstants"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "alembic"
 version = "1.7.4"
 description = "A database migration tool for SQLAlchemy."
@@ -637,9 +645,14 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "3.9.7"
-content-hash = "6e48de6f02fe6e80ea5a3dc6101f3dca246843e492e658b6dc8b919a7c8dc770"
+content-hash = "5b1f100542204d88c8e676ed5597978bc111ea1c93f0c3d31f3cd05514c099d3"
 
 [metadata.files]
+aenum = [
+    {file = "aenum-3.1.5-py2-none-any.whl", hash = "sha256:d50b9f8aa3e75c179056182820227eb09485e0bd07f968983744dfbd11958350"},
+    {file = "aenum-3.1.5-py3-none-any.whl", hash = "sha256:7db6e790434baece9e14a97da69118edc89ade821f36590ce32a295f1e500e89"},
+    {file = "aenum-3.1.5.tar.gz", hash = "sha256:2ebad8590b6a0183c0d9893523b458edce987ae4533339c5ac185cfac32daf1a"},
+]
 alembic = [
     {file = "alembic-1.7.4-py3-none-any.whl", hash = "sha256:e3cab9e59778b3b6726bb2da9ced451c6622d558199fd3ef914f3b1e8f4ef704"},
     {file = "alembic-1.7.4.tar.gz", hash = "sha256:9d33f3ff1488c4bfab1e1a6dfebbf085e8a8e1a3e047a43ad29ad1f67f012a1d"},

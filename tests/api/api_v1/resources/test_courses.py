@@ -3,38 +3,51 @@ import json
 from app.api.api_v1.resources import courses
 from app.crud import course, user, enroll_course, collaborator, subscription
 from app.models.user import UserAccount
+from app.schemas.course.course import CourseType
 from tests.helper.collaborator_helper import collaborator_response_json, collaborator_db_json, \
     course_collaboration_rq_json, other_course_collaboration_rq_json
 from tests.helper.courses_helper import course_response_json, other_course_db, course_to_create_json, \
      course_patch_json
 from tests.helper.enroll_course_helper import enroll_course_response_json, course_registration_json
-
-
-# ------------------ Courses get with filters ------------------------ #
 from tests.helper.user_subscription_helpler import gold_subscription_db, premium_subscription_db
 
 
+# ------------------ Courses get with filters ------------------------ #
 def test_courses_invalid_keyword(test_app):
     response = test_app.get("/api/v1/courses?keyword=aa")
     assert response.status_code == 422
 
 
 def test_courses_ok_no_users(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_multi', return_value=[])
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[])
     response = test_app.get("/api/v1/courses")
     assert response.status_code == 200
     assert response.json() == {'results': []}
 
 
+def test_courses_ok_filters_case_ingore_ok(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[])
+    response = test_app.get("/api/v1/courses?category=programming")
+    assert response.status_code == 200
+    assert response.json() == {'results': []}
+
+
+def test_courses_ok_filters_case_ingore2_ok(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[])
+    response = test_app.get("/api/v1/courses?category=PrograMmIng")
+    assert response.status_code == 200
+    assert response.json() == {'results': []}
+
+
 def test_courses_ok_with_results(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_multi', return_value=[course_db, course_db])
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
     response = test_app.get("/api/v1/courses")
     assert response.status_code == 200
     assert response.json() == {'results': [course_response_json, course_response_json]}
 
 
 def test_courses_ok_filter(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_multi', return_value=[course_db, other_course_db])
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, other_course_db])
     response = test_app.get("/api/v1/courses?keyword=java")
     assert response.status_code == 200
     assert response.json() == {'results': [course_response_json]}
@@ -53,7 +66,7 @@ def test_courses_ok_pagination_invalid_page_size(test_app):
 
 
 def test_courses_ok_pagination(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_multi', return_value=[course_db, course_db])
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
     response = test_app.get("/api/v1/courses?page_size=1&page=1")
     assert response.status_code == 200
     assert response.json() == {'results': [course_response_json, course_response_json]}
@@ -284,3 +297,15 @@ def test_validate_user_subscription_against_course_subscription_premium_ok_premi
         user_subscription=premium_subscription_db,
         course_subscription_required=premium_subscription_db)
     assert result
+
+
+def test_courses_types(test_app):
+    response = test_app.get("/api/v1/courses/types")
+    assert response.status_code == 200
+    assert response.json() == {'course_types': CourseType.list()}
+
+
+def test_course_types_name_ignore_case():
+    assert CourseType["programming"] == CourseType.programming
+    assert CourseType["Programming"] == CourseType.programming
+    assert CourseType["progrAMming"] == CourseType.programming

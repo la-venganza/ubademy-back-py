@@ -164,7 +164,7 @@ user_info_extra_data_db_json = json.loads(
             "course": { \
                 "title": "Curso Java", \
                 "description": "Venis a aprender", \
-                "type": "DEV", \
+                "type": "Programming", \
                 "hashtags": "java, whatsapp, back, develop", \
                 "location": "internet", \
                 "lessons": [ \
@@ -191,7 +191,7 @@ user_info_extra_data_db_json = json.loads(
             "course": { \
                   "title": "Curso Java", \
                   "description": "Venis a aprender", \
-                  "type": "DEV", \
+                  "type": "Programming", \
                   "hashtags": "java, whatsapp, back, develop", \
                   "location": "internet", \
                   "lessons": [ \

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.services import course_service, user_service
 from app.schemas.course.course import CourseCreate, CourseCreateRQ, Course, CourseSearchResults, \
-    CourseRegistration, CourseCollaboration, CourseUpdateRq
+    CourseRegistration, CourseCollaboration, CourseUpdateRq, CourseType, CourseTypeResults
 from app import deps, crud
 from app.models.enroll_course import EnrollCourse as EnrollCourseDb
 from app.schemas.enroll_course import EnrollCourse
@@ -21,10 +21,21 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
+@router_v1.get("/types", status_code=status.HTTP_200_OK, response_model=CourseTypeResults)
+async def get_course_types():
+    """
+    Get values of course types allowed for courses
+    """
+    logging.info(f"Getting course types list")
+    return {"course_types": CourseType.list()}
+
+
 @router_v1.get("/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
 async def search_courses(
     *,
     keyword: Optional[str] = Query(None, min_length=3, example="java"),
+    category: Optional[CourseType] = Query(None, example=CourseType.programming),
+    plan: Optional[SubscriptionTitle] = Query(None, example=SubscriptionTitle.free),
     max_results: Optional[int] = 10,
     page_size: Optional[int] = 10,
     page: Optional[int] = 1,
@@ -34,7 +45,8 @@ async def search_courses(
     Search for courses based on hashtags keyword
     """
     await pagination_validator(page=page, page_size=page_size)
-    courses = crud.course.get_multi(db=db, limit=page_size, offset=(page - 1) * page_size)
+    courses = crud.course.get_courses_with_filters(db=db, category_filter=category, plan_filter=plan,
+                                                   limit=page_size, offset=(page - 1) * page_size)
     if not keyword:
         return {"results": courses}
 

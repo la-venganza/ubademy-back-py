@@ -100,7 +100,7 @@ exam_db_json = json.loads(
          }, \
          { \
           "sequence_number": 1, \
-          "type": "Develop", \
+          "type": "Programming", \
           "score": 1, \
           "multiple_choice_question": null, \
           "develop_question": { \
