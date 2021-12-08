@@ -1,3 +1,5 @@
+from typing import List
+
 from aenum import Enum
 
 from pydantic import BaseModel
@@ -41,3 +43,7 @@ class Subscription(SubscriptionInDBBase):
 
 class SubscriptionBasics(SubscriptionInDBBase):
     pass
+
+
+class SubscriptionSearchResults(BaseModel):
+    subscription_plans: List[Subscription]
