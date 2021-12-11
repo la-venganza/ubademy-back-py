@@ -22,6 +22,7 @@ class EnrollCourseCreate(EnrollCourseBase):
 
 
 class EnrollCourseInDBBase(EnrollCourseBase):
+    id: int
     user: User
     course: Course
     start_date: date

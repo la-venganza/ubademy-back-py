@@ -36,6 +36,13 @@ def user_extra_data_db():
 
 
 @pytest.fixture(scope="module")
+def user_extra_data_inactive_student_db():
+    user = UserAccount(**user_info_extra_data_db_json)
+    user.enroll_courses[0].active = False
+    return user
+
+
+@pytest.fixture(scope="module")
 def course_db():
     return Course(**course_db_json)
 
