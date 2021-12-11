@@ -2,6 +2,7 @@ import json
 
 collaborator_response_json = json.loads(
     '{ \
+        "id": 1, \
         "end_date": null, \
         "active": true, \
         "start_date": "2020-01-01", \

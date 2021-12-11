@@ -20,6 +20,7 @@ class CollaboratorCreate(CollaboratorBase):
 
 
 class CollaboratorInDBBase(CollaboratorBase):
+    id: int
     user: User
     course: Course
     start_date: date

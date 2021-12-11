@@ -2,6 +2,7 @@ import json
 
 enroll_course_response_json = json.loads(
     '{ \
+        "id": 1, \
         "current_lesson": null, \
         "end_date": null, \
         "grade": null, \
