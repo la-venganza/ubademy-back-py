@@ -67,8 +67,7 @@ def test_course_registration_user_inactive_registration_ok(
 # ------------------ Course disenroll ------------------------ #
 def test_course_disenroll_course_not_found(test_app, mocker):
     mocker.patch.object(course, 'get', return_value=None)
-    response = test_app.patch("/api/v1/courses/1/registration",
-                             data=json.dumps(course_registration_json))
+    response = test_app.patch("/api/v1/courses/1/registration",  data=json.dumps(course_registration_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'Course with id 1 was not found'}
 
@@ -77,8 +76,7 @@ def test_course_disenrol_user_id_not_found(test_app, course_db, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
     mocker.patch.object(user, 'get_by_user_id',
                         return_value=None)
-    response = test_app.patch("/api/v1/courses/1/registration",
-                             data=json.dumps(course_registration_json))
+    response = test_app.patch("/api/v1/courses/1/registration", data=json.dumps(course_registration_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'The user with id 1 was not found'}
 
