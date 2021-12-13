@@ -3,7 +3,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, EmailStr
 
-from app.schemas.course.course import Course
+from app.schemas.course.course import CourseBasics
 from app.schemas.user_subscription import UserSubscriptionBasics, UserSubscriptionCreateBase
 
 
@@ -52,7 +52,7 @@ class UserEnrollCourseInDBBase(BaseModel):
     current_lesson: Optional[int] = None
     grade: Optional[int] = None
     end_date: Optional[date] = None
-    course: Course
+    course: CourseBasics
     start_date: date
 
     class Config:
@@ -62,7 +62,7 @@ class UserEnrollCourseInDBBase(BaseModel):
 class CollaboratorUserBasics(BaseModel):
     user_id: str
     course_id: int
-    course: Course
+    course: CourseBasics
     active: bool
     end_date: Optional[date] = None
     start_date: date
@@ -73,7 +73,7 @@ class CollaboratorUserBasics(BaseModel):
 
 # Additional ...
 class UserInDBCompleteBase(User):
-    created_courses: List[Course]
+    created_courses: List[CourseBasics]
     enroll_courses: List[UserEnrollCourseInDBBase]
     collaborating_courses: List[CollaboratorUserBasics]
 

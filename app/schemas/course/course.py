@@ -110,3 +110,16 @@ class Course(CourseInDBBase):
 
 class CourseSearchResults(BaseModel):
     results: List[Course]
+
+
+class CourseBasics(BaseModel):
+    id: int
+    title: str
+    description: str
+    type: CourseType
+    hashtags: str
+    location: str
+    subscription_id_required: int
+
+    class Config:
+        orm_mode = True
