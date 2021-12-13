@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from aenum import Enum
 
 from typing import List, Optional
@@ -119,7 +119,29 @@ class CourseBasics(BaseModel):
     type: CourseType
     hashtags: str
     location: str
-    subscription_id_required: int
+    subscription_required_: str = Field(..., alias="subscription_required")
+    creator_id: str
+    creator_: str = Field(..., alias="creator")
 
     class Config:
         orm_mode = True
+
+    @validator('subscription_required_', always=True, pre=True)
+    def validate_subscription_required_title(cls, v):
+        if v is None:
+            raise TypeError('"subscription_required" is None')
+        if isinstance(v, str):
+            return v
+        if v.title is None:
+            raise ValueError('Not found "title" in "subscription_required"')
+        return v.title
+
+    @validator('creator_', always=True, pre=True)
+    def validate_creator_username(cls, v):
+        if v is None:
+            raise TypeError('"creator" is None')
+        if isinstance(v, str):
+            return v
+        if v.username is None:
+            raise ValueError('Not found "username" in "creator"')
+        return v.username
