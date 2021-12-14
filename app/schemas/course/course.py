@@ -1,3 +1,5 @@
+from datetime import date
+
 from pydantic import BaseModel, Field, validator
 from aenum import Enum
 
@@ -108,10 +110,6 @@ class Course(CourseInDBBase):
     pass
 
 
-class CourseSearchResults(BaseModel):
-    results: List[Course]
-
-
 class CourseBasics(BaseModel):
     id: int
     title: str
@@ -119,29 +117,90 @@ class CourseBasics(BaseModel):
     type: CourseType
     hashtags: str
     location: str
-    subscription_required_: str = Field(..., alias="subscription_required")
+    subscription_required: SubscriptionBasics
+    subscription_required_plan: Optional[str]
     creator_id: str
     creator_: str = Field(..., alias="creator")
 
     class Config:
         orm_mode = True
 
-    @validator('subscription_required_', always=True, pre=True)
-    def validate_subscription_required_title(cls, v):
-        if v is None:
-            raise TypeError('"subscription_required" is None')
-        if isinstance(v, str):
-            return v
-        if v.title is None:
-            raise ValueError('Not found "title" in "subscription_required"')
-        return v.title
+    @validator('subscription_required_plan', always=True, pre=True)
+    def validate_subscription_required_title(cls, v, values):
+        if isinstance(values, dict):
+            if 'subscription_required' in values:
+                subscription_required = values['subscription_required']
+                if subscription_required.title:
+                    return subscription_required.title
+        return None
 
     @validator('creator_', always=True, pre=True)
     def validate_creator_username(cls, v):
         if v is None:
             raise TypeError('"creator" is None')
+        if isinstance(v, dict):
+            if 'username' in v:
+                return v['username']
         if isinstance(v, str):
             return v
         if v.username is None:
             raise ValueError('Not found "username" in "creator"')
         return v.username
+
+
+class CourseSearchResults(BaseModel):
+    results: List[CourseBasics]
+
+
+class CourseStudent(CourseBasics):
+    lessons: List[Lesson]
+
+
+class UserBasics(BaseModel):
+    username: str
+    user_id: str
+    first_name: Optional[str]
+    last_name: Optional[str]
+    role: Optional[str]
+    email: str
+
+    class Config:
+        orm_mode = True
+
+
+class CourseEnrollmentBasics(BaseModel):
+    id: int
+    user: UserBasics
+    start_date: date
+    active: bool
+    current_lesson: Optional[int] = None
+    grade: Optional[int] = None
+    end_date: Optional[date] = None
+
+    class Config:
+        orm_mode = True
+
+
+class CourseCollaborator(CourseStudent):
+    enrollments: List[CourseEnrollmentBasics]
+
+
+class CourseCollaboratorBasics(BaseModel):
+    id: int
+    active: bool
+    end_date: Optional[date] = None
+    user: UserBasics
+    start_date: date
+
+    class Config:
+        orm_mode = True
+
+
+class CourseCreator(CourseCollaborator):
+    collaborators: List[CourseCollaboratorBasics]
+
+
+class CourseGlobal(CourseCreator):
+    lessons: Optional[List[Lesson]]
+    enrollments: Optional[List[CourseEnrollmentBasics]]
+    collaborators: Optional[List[CourseCollaboratorBasics]]

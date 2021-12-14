@@ -29,7 +29,7 @@ async def verify_course_with_creator(course_id: int, user_id: str, db: Session =
 
 
 async def get_full_course_by_id(course_id, db: Session = Depends(get_db)):
-    course = crud.course.get_full_by_course_id(db=db, course_id=course_id)
+    course = crud.course.get(db=db, id=course_id)
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Course with id {course_id} was not found")

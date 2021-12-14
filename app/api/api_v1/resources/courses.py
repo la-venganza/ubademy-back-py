@@ -1,12 +1,13 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 from fastapi import APIRouter, HTTPException, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.services import course_service, user_service
 from app.schemas.course.course import CourseCreate, CourseCreateRQ, Course, CourseSearchResults, \
-    CourseCollaboration, CourseUpdateRq, CourseType, CourseTypeResults
+    CourseCollaboration, CourseUpdateRq, CourseType, CourseTypeResults, CourseStudent, CourseCollaborator, \
+    CourseCreator, CourseBasics, CourseGlobal
 from app import deps, crud
 from app.models.collaborator import Collaborator as CollaboratorDb
 from app.schemas.collaborator import Collaborator
@@ -74,18 +75,30 @@ async def create_course(course_in: CourseCreateRQ, db: Session = Depends(deps.ge
     return course
 
 
-@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK, response_model=Course)
-async def get(course_id: int, db: Session = Depends(deps.get_db), ):
+@router_v1.get("/{course_id}", status_code=status.HTTP_200_OK, response_model=Union[CourseGlobal, Course])
+async def get(
+        course_id: int,
+        user_id: Optional[str] = Query(None, example="userId"),
+        db: Session = Depends(deps.get_db), ):
     """
     Get a single course by id
     """
     logging.info(f"Getting course id {course_id}")
-    course = crud.course.get_full_by_course_id(db=db, course_id=course_id)
+    course = crud.course.get(db=db, id=course_id)
     if course is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The course with id {course_id} was not found")
+    if user_id:
+        if any(enrollment.user_id == user_id and enrollment.active for enrollment in course.enrollments):
+            return CourseStudent.from_orm(course)
+        elif any(collaborator.user_id == user_id and collaborator.active for collaborator in course.collaborators):
+            return CourseCollaborator.from_orm(course)
+        elif course.creator_id == user_id:
+            return CourseCreator.from_orm(course)
+        else:
+            return CourseBasics.from_orm(course)
 
-    return course
+    return Course.from_orm(course)
 
 
 @router_v1.post("/{course_id}/collaboration", status_code=status.HTTP_200_OK, response_model=Collaborator)
