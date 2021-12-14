@@ -23,6 +23,26 @@ course_db_json = json.loads(
       ], \
       "id": 1, \
       "creator_id": "1", \
+        "creator": { \
+          "username" : "username",  \
+          "email": "some@mail.com.ar", \
+          "role": "Owner", \
+          "user_id": "1", \
+          "is_admin": true, \
+          "birth_date": "1998-01-20", \
+          "subscriptions": [ \
+            { \
+              "active": true, \
+              "end_date": null, \
+              "subscription": { \
+                "id": 3, \
+                "title": "Premium" \
+              }, \
+              "start_date": "2021-11-21" \
+            } \
+          ], \
+          "blocked": false \
+        }, \
       "subscription_id_required": 1, \
       "subscription_required": { \
             "id": 1, \
@@ -43,6 +63,47 @@ lesson_db_of_course_json = json.loads(
           "multimedia_id": "1235", \
           "multimedia_type": "pdf" \
         }'
+)
+
+
+course_basics_response_json = json.loads(
+    '{ \
+      "title": "Curso Java", \
+      "description": "Venis a aprender", \
+      "type": "Programming", \
+      "hashtags": "java, whatsapp, back, develop", \
+      "location": "internet", \
+      "id": 1, \
+      "creator_id": "1", \
+      "creator": "username", \
+      "subscription_required_plan": "Free", \
+       "subscription_required": { \
+            "id": 1, \
+            "title": "Free"\
+      } \
+    }'
+)
+
+
+course_global_basics_response_json = json.loads(
+    '{ \
+      "title": "Curso Java", \
+      "description": "Venis a aprender", \
+      "type": "Programming", \
+      "hashtags": "java, whatsapp, back, develop", \
+      "location": "internet", \
+      "id": 1, \
+      "creator_id": "1", \
+      "creator": "username", \
+      "lessons": null, \
+      "enrollments": null, \
+      "collaborators": null, \
+      "subscription_required_plan": "Free", \
+       "subscription_required": { \
+            "id": 1, \
+            "title": "Free"\
+      } \
+    }'
 )
 
 

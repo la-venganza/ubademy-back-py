@@ -6,7 +6,7 @@ from app.schemas.course.course import CourseType
 from tests.helper.collaborator_helper import collaborator_response_json, collaborator_db_json, \
     course_collaboration_rq_json, other_course_collaboration_rq_json
 from tests.helper.courses_helper import course_response_json, other_course_db, course_to_create_json, \
-     course_patch_json
+    course_patch_json, course_basics_response_json, course_global_basics_response_json
 
 
 # ------------------ Courses get with filters ------------------------ #
@@ -40,14 +40,14 @@ def test_courses_ok_with_results(test_app, course_db, mocker):
     mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
     response = test_app.get("/api/v1/courses")
     assert response.status_code == 200
-    assert response.json() == {'results': [course_response_json, course_response_json]}
+    assert response.json() == {'results': [course_basics_response_json, course_basics_response_json]}
 
 
 def test_courses_ok_filter(test_app, course_db, mocker):
     mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, other_course_db])
     response = test_app.get("/api/v1/courses?keyword=java")
     assert response.status_code == 200
-    assert response.json() == {'results': [course_response_json]}
+    assert response.json() == {'results': [course_basics_response_json]}
 
 
 def test_courses_ok_pagination_invalid_page_value(test_app):
@@ -66,7 +66,7 @@ def test_courses_ok_pagination(test_app, course_db, mocker):
     mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
     response = test_app.get("/api/v1/courses?page_size=1&page=1")
     assert response.status_code == 200
-    assert response.json() == {'results': [course_response_json, course_response_json]}
+    assert response.json() == {'results': [course_basics_response_json, course_basics_response_json]}
 
 
 # ------------------ Course post ------------------------ #
@@ -88,17 +88,24 @@ def test_courses_fail_create_user_not_exists(test_app, mocker):
 
 # ------------------ Course get by id ------------------------ #
 def test_course_not_found(test_app, mocker):
-    mocker.patch.object(course, 'get_full_by_course_id', return_value=None)
+    mocker.patch.object(course, 'get', return_value=None)
     response = test_app.get("/api/v1/courses/1")
     assert response.status_code == 404
     assert response.json() == {'detail': 'The course with id 1 was not found'}
 
 
 def test_course_ok(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_full_by_course_id', return_value=course_db)
+    mocker.patch.object(course, 'get', return_value=course_db)
     response = test_app.get("/api/v1/courses/1")
     assert response.status_code == 200
     assert response.json() == course_response_json
+
+
+def test_course_ok_basic_not_student(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    response = test_app.get("/api/v1/courses/1?user_id=fake")
+    assert response.status_code == 200
+    assert response.json() == course_global_basics_response_json
 
 
 # ------------------ Course collaboration ------------------------ #

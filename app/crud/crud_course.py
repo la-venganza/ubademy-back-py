@@ -17,9 +17,6 @@ from app.models.subscription import Subscription
 
 class CRUDCourse(CRUDBase[Course, CourseCreate, CourseUpdate]):
 
-    def get_full_by_course_id(self, db: Session, *, course_id: str) -> Optional[Course]:
-        return db.query(Course).options(joinedload('*')).filter(Course.id == course_id).first()
-
     # Be aware not to use this query to update anything. This query is forcing to bring only relations
     # from EnrollCourseExam with filter attributes, there might be missing information in course entity
     def get_exams_from_courses(self, db: Session, *, user_id: str, active_students: bool, graded: bool,
