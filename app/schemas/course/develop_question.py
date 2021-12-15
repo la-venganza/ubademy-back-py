@@ -14,16 +14,16 @@ class DevelopQuestionCreate(DevelopQuestionBase):
     question_id: int
 
 
-class DevelopQuestionUpdate(DevelopQuestionBase):
-    ...
-
-
 class DevelopQuestionInDBBase(DevelopQuestionBase):
     id: int
     question_id: int
 
     class Config:
         orm_mode = True
+
+
+class DevelopQuestionForStaff(DevelopQuestionBase):
+    pass
 
 
 class DevelopQuestionUpdate(DevelopQuestionBase):

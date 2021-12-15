@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, HTTPException, Depends, status, Query
 from sqlalchemy.orm import Session
 
 from app import deps, crud
@@ -8,7 +8,7 @@ from app.schemas.course.exam import Exam, ExamUpdateRq, ExamCreateRq
 from app.models.course import Exam as ExamDb, Lesson
 from app.services import course_service
 from app.schemas.enroll_course_exam import EnrollCourseExamCreate, EnrollCourseExamRQ, EnrollCourseExam, \
-    EnrollCourseExamGradingRQ, EnrollCourseExamUpdate
+    EnrollCourseExamGradingRQ, EnrollCourseExamUpdate, EnrollCourseExamForStaff
 
 logger = logging.getLogger(__name__)
 
@@ -117,4 +117,36 @@ async def exam_correction(
     enroll_course_exam = crud.enroll_course_exam.update(
         db=db, db_obj=enroll_course_exam, obj_in=EnrollCourseExamUpdate(grade=graded_exam_in.grade))
 
+    return enroll_course_exam
+
+
+@router_v1.get("/{exam_id}/solution/{exam_taken_id}",
+               status_code=status.HTTP_200_OK, response_model=EnrollCourseExamForStaff)
+async def search_exams(
+    course_id: int, lesson_id: int, exam_id: int, exam_taken_id: int,
+    user_id: str = Query(..., example="someUserId"),
+    db: Session = Depends(deps.get_db),
+) -> dict:
+    """
+    Search for exam by exam taken id for student to check the exam, or for course creator/collaborators.
+    """
+    enroll_course_exam = crud.enroll_course_exam.get(db=db, id=exam_taken_id)
+    if not enroll_course_exam \
+            or enroll_course_exam.enroll_course_id != course_id \
+            or enroll_course_exam.lesson_id != lesson_id \
+            or enroll_course_exam.exam_id != exam_id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Exam taken with id {exam_taken_id} of course with id {course_id} and lesson id {lesson_id}"
+                   f" and exam id {exam_id} was not found."
+        )
+
+    staff_verified = await course_service.verify_course_staff(course_id=course_id, user_id=user_id, db=db)
+    student_verified = enroll_course_exam.enroll_course.user_id == user_id
+    if not student_verified and not staff_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Exam of course with id {course_id} can only be seen by it's creator or a collaborator or by"
+                   f" student owner"
+        )
     return enroll_course_exam

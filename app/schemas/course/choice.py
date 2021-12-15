@@ -27,6 +27,10 @@ class ChoiceInDBBase(ChoiceBase):
         orm_mode = True
 
 
+class ChoiceForStaff(ChoiceBase):
+    pass
+
+
 class ChoiceUpdate(ChoiceBase):
     id: Optional[int]
 

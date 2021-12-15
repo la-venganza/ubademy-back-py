@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from app.schemas.course.choice import ChoiceBase, Choice, ChoiceUpdate
+from app.schemas.course.choice import ChoiceBase, Choice, ChoiceUpdate, ChoiceForStaff
 
 
 class MultipleChoiceQuestionBase(BaseModel):
@@ -26,6 +26,13 @@ class MultipleChoiceQuestionInDBBase(MultipleChoiceQuestionBase):
     id: int
     question_id: int
     choices: List[Choice]
+
+    class Config:
+        orm_mode = True
+
+
+class MultipleChoiceQuestionForStaff(MultipleChoiceQuestionBase):
+    choices: List[ChoiceForStaff]
 
     class Config:
         orm_mode = True
