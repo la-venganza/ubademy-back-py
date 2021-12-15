@@ -122,7 +122,7 @@ async def exam_correction(
 
 @router_v1.get("/{exam_id}/solution/{exam_taken_id}",
                status_code=status.HTTP_200_OK, response_model=EnrollCourseExamForStaff)
-async def search_exams(
+async def search_exam_publish_by_id(
     course_id: int, lesson_id: int, exam_id: int, exam_taken_id: int,
     user_id: str = Query(..., example="someUserId"),
     db: Session = Depends(deps.get_db),
