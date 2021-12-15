@@ -4,8 +4,8 @@ from typing import Optional, List
 from pydantic import BaseModel, Field
 
 from app.schemas.enroll_course import EnrollCourse, EnrollCourseBasics
-from app.schemas.answer import Answer, AnswerBase, AnswerExamRQ, AnswerBasics
-from app.schemas.course.exam import Exam
+from app.schemas.answer import Answer, AnswerBase, AnswerExamRQ, AnswerBasics, AnswerForStaff
+from app.schemas.course.exam import Exam, ExamBase
 
 
 class EnrollCourseExamBase(BaseModel):
@@ -56,6 +56,15 @@ class EnrollCourseExam(EnrollCourseExamBase):
 
 class EnrollCourseExamSearchResults(BaseModel):
     results: List[EnrollCourseExam]
+
+
+class EnrollCourseExamForStaff(EnrollCourseExamBase):
+    exam: ExamBase
+    answers: List[AnswerForStaff]
+    exam_date: datetime
+
+    class Config:
+        orm_mode = True
 
 
 # Properties to receive via API on update

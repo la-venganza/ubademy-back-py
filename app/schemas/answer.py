@@ -2,8 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, Field
 
-from app.schemas.course.choice import Choice
-from app.schemas.course.question import Question
+from app.schemas.course.choice import Choice, ChoiceForStaff
+from app.schemas.course.question import Question, QuestionForStaff
 
 
 class AnswerBase(BaseModel):
@@ -41,6 +41,14 @@ class AnswerBasics(AnswerBase):
     id: int
     enroll_course_exam_id: int
     question_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class AnswerForStaff(AnswerBase):
+    question: QuestionForStaff
+    choice: Optional[ChoiceForStaff] = None
 
     class Config:
         orm_mode = True
