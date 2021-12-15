@@ -1,7 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional, List
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 from app.schemas.course.course import CourseBasics
 from app.schemas.user_subscription import UserSubscriptionBasics, UserSubscriptionCreateBase
@@ -47,12 +47,26 @@ class UserSearchResults(BaseModel):
     results: List[User]
 
 
+class EnrollCourseExamUser(BaseModel):
+    id: int = Field(alias='exam_taken_id')
+    lesson_id: int
+    exam_id: int
+    exam_date: datetime
+    grade: Optional[int] = Field(None, alias='exam_grade')
+
+    class Config:
+        orm_mode = True
+        allow_population_by_field_name = True
+
+
 class UserEnrollCourseInDBBase(BaseModel):
     active: bool
     current_lesson: Optional[int] = None
     grade: Optional[int] = None
     end_date: Optional[date] = None
+    course_id: int
     course: CourseBasics
+    exams: Optional[List[EnrollCourseExamUser]]
     start_date: date
 
     class Config:
