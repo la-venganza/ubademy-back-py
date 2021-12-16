@@ -13,6 +13,7 @@ from app.models.collaborator import Collaborator as CollaboratorDb
 from app.schemas.collaborator import Collaborator
 from app.services import subscription_service
 from app.schemas.subscription import SubscriptionTitle
+from app.utils import pagination_utils
 
 logger = logging.getLogger(__name__)
 
@@ -41,8 +42,9 @@ async def search_courses(
 ) -> dict:
     """
     Search for courses based on hashtags keyword
+    Max results param is only taken into account when keyword param is sent
     """
-    await pagination_validator(page=page, page_size=page_size)
+    await pagination_utils.validate_pagination(page=page, page_size=page_size)
     courses = crud.course.get_courses_with_filters(db=db, category_filter=category, plan_filter=plan,
                                                    limit=page_size, offset=(page - 1) * page_size)
     if not keyword:
@@ -148,12 +150,3 @@ async def update_course(course_id: int, course_update_rq: CourseUpdateRq,
     )
 
     return course_updated
-
-
-async def pagination_validator(page, page_size):
-    if page < 1:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Page value must be at least 1")
-    if page_size < 1:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Page size must be at least 1")

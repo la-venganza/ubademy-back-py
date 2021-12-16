@@ -22,22 +22,26 @@ async def get_users(
         keyword: Optional[str] = Query(None, min_length=3, example="gmail"),
         email: Optional[EmailStr] = Query(None, example="someone@someone.com"),
         max_results: Optional[int] = 10,
+        page_size: Optional[int] = 10,
+        page: Optional[int] = 1,
         db: Session = Depends(deps.get_db),
 ) -> dict:
     """
     Search for users based on email or/and email information
+    max_results is taken into account only when keyword filter is sent
     """
     if email:
         user = crud.user.get_by_email(db=db, email=email)
         response = [user] if user else []
         return {"results": response}
 
-    users = crud.user.get_multi(db=db, limit=max_results)
+    users = crud.user.get_users_with_filters(
+        db=db, email_contains_filer=keyword, limit=page_size, offset=(page - 1) * page_size
+    )
     if not keyword:
         return {"results": users}
 
-    results = filter(lambda user: keyword.lower() in user.email.lower(), users)
-    return {"results": list(results)[:max_results]}
+    return {"results": list(users)[:max_results]}
 
 
 def basic_user_to_create(user_in: UserCreateRQ, base_subscription):

@@ -38,25 +38,32 @@ def test_users_invalid_keyword(test_app):
 
 
 def test_users_ok_no_users(test_app, mocker):
-    mocker.patch.object(user, 'get_multi', return_value=[])
+    mocker.patch.object(user, 'get_users_with_filters', return_value=[])
     response = test_app.get("/api/v1/users")
     assert response.status_code == 200
     assert response.json() == {'results': []}
 
 
 def test_users_ok_with_results(test_app, user_complete_db, mocker):
-    mocker.patch.object(user, 'get_multi', return_value=[user_complete_db, user_complete_db])
+    mocker.patch.object(user, 'get_users_with_filters', return_value=[user_complete_db, user_complete_db])
     response = test_app.get("/api/v1/users")
     assert response.status_code == 200
     assert response.json() == {'results': [basic_user_info_out_json, basic_user_info_out_json]}
 
 
 # ------------------ User get users with filters ------------------------ #
-def test_users_ok_filter_keyword(test_app, user_complete_db,  mocker):
-    mocker.patch.object(user, 'get_multi', return_value=[user_complete_db, other_complete_db])
-    response = test_app.get("/api/v1/users?keyword=some")
+def test_users_ok_filter_keyword_with_max_results(test_app, user_complete_db,  mocker):
+    mocker.patch.object(user, 'get_users_with_filters', return_value=[user_complete_db, user_complete_db])
+    response = test_app.get("/api/v1/users?keyword=some&max_results=1")
     assert response.status_code == 200
     assert response.json() == {'results': [basic_user_info_out_json]}
+
+
+def test_users_ok_filter_no_keyword_with_max_results_ignore(test_app, user_complete_db,  mocker):
+    mocker.patch.object(user, 'get_users_with_filters', return_value=[user_complete_db, user_complete_db])
+    response = test_app.get("/api/v1/users?max_results=1")
+    assert response.status_code == 200
+    assert response.json() == {'results': [basic_user_info_out_json, basic_user_info_out_json]}
 
 
 def test_users_ok_filter_email(test_app, user_complete_db, mocker):
