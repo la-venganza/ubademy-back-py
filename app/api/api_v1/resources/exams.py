@@ -132,7 +132,7 @@ async def search_exam_publish_by_id(
     """
     enroll_course_exam = crud.enroll_course_exam.get(db=db, id=exam_taken_id)
     if not enroll_course_exam \
-            or enroll_course_exam.enroll_course_id != course_id \
+            or enroll_course_exam.enroll_course.course_id != course_id \
             or enroll_course_exam.lesson_id != lesson_id \
             or enroll_course_exam.exam_id != exam_id:
         raise HTTPException(
