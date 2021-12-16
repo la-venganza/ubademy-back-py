@@ -497,7 +497,7 @@ enroll_course_exam_db_complete_json = json.loads(
       "exam_date" : "2021-01-01T13:59:57", \
       "id": 1, \
       "exam_id": 2, \
-      "enroll_course_id": 1, \
+      "enroll_course_id": 2, \
       "lesson_id": 1, \
       "answers": [ \
         { \
@@ -608,7 +608,8 @@ enroll_course_exam_db_complete_json = json.loads(
         "current_lesson": null, \
         "grade": null, \
         "end_date": null, \
-        "id": 1, \
+        "course_id": 1, \
+        "id": 2, \
         "user": { \
           "username": "test user", \
           "first_name": "Juan", \
