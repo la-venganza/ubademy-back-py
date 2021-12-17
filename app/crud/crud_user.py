@@ -1,5 +1,5 @@
 import uuid
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional, Union, List
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -15,6 +15,14 @@ class CRUDUser(CRUDBase[UserAccount, UserCreate, UserUpdate]):
 
     def get_by_email(self, db: Session, *, email: str) -> Optional[UserAccount]:
         return db.query(UserAccount).filter(func.lower(UserAccount.email) == func.lower(email)).first()
+
+    def get_users_with_filters(self, db: Session, *, email_contains_filer: str,
+                               offset: int = 0, limit: int = 100) -> List[UserAccount]:
+        query = db.query(UserAccount)
+        if email_contains_filer is not None:
+            email_contains = '%{0}%'.format(email_contains_filer)
+            query = query.filter(UserAccount.email.ilike(email_contains))
+        return query.offset(offset).limit(limit).all()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> UserAccount:
         create_data = obj_in.dict()

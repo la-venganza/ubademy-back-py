@@ -1,12 +1,13 @@
 import logging
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, Query, status
+from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app import deps
 from app.schemas.course_exam import CourseExamResults
 from app.services import course_service
+from app.utils import pagination_utils
 
 logger = logging.getLogger(__name__)
 
@@ -26,19 +27,10 @@ async def search_exams(
     """
     Search for exams taken by students, relevant for course creators/collaborators.
     """
-    await pagination_validator(page=page, page_size=page_size)
+    await pagination_utils.validate_pagination(page=page, page_size=page_size)
 
     course_exams = await course_service.get_exams_for_staff(
         db=db, staff_id=user_id, active_students_filter=active_students,
         graded_status_filter=graded_status, pagination_limit=page_size,
         pagination_offset=(page - 1) * page_size)
     return {"results": course_exams}
-
-
-async def pagination_validator(page, page_size):
-    if page < 1:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Page value must be at least 1")
-    if page_size < 1:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Page size must be at least 1")
