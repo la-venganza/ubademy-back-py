@@ -21,3 +21,17 @@ class CourseExam(BaseModel):
 
 class CourseExamResults(BaseModel):
     results: List[CourseExam]
+
+
+class ExamBasics(BaseModel):
+    course_id: int
+    lesson_id: int
+    id: int
+    title: str
+    description: str
+    minimum_qualification: int
+    active: bool
+
+
+class ExamResults(BaseModel):
+    results: List[ExamBasics]

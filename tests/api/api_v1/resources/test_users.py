@@ -78,14 +78,14 @@ def test_users_create_ok(test_app, user_complete_db, free_subscription_db, mocke
     mocker.patch.object(user, 'get_by_email', return_value=None)
     mocker.patch.object(user, 'create', return_value=user_complete_db)
     mocker.patch.object(subscription, 'get_by_subscription_plan', return_value=free_subscription_db)
-    response = test_app.post("/api/v1/users/", data=json.dumps(basic_user_info_in_json))
+    response = test_app.post("/api/v1/users", data=json.dumps(basic_user_info_in_json))
     assert response.status_code == 200
     assert response.json() == basic_user_info_out_json
 
 
 def test_users_create_already_exists(test_app, user_complete_db, mocker):
     mocker.patch.object(user, 'get_by_email', return_value=user_complete_db)
-    response = test_app.post("/api/v1/users/", data=json.dumps(basic_user_info_in_json))
+    response = test_app.post("/api/v1/users", data=json.dumps(basic_user_info_in_json))
     assert response.status_code == 200
     assert response.json() == basic_user_info_out_json
 

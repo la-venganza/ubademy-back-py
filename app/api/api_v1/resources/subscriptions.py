@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSubscriptionSearchResults)
+@router_v1.get("", status_code=status.HTTP_200_OK, response_model=UserSubscriptionSearchResults)
 async def get_user_subscriptions(
         active_filter: Optional[bool] = Query(None, example="false"),
         user: UserAccount = Depends(user_service.get_user_by_id),
@@ -45,7 +45,7 @@ def filter_by_active_filter(subscription, active_filter):
         else (not subscription.active or (subscription.end_date and subscription.end_date < date.today()))
 
 
-@router_v1.post("/", status_code=status.HTTP_200_OK, response_model=UserSubscriptionBasics)
+@router_v1.post("", status_code=status.HTTP_200_OK, response_model=UserSubscriptionBasics)
 async def post(
         subscription_in: UserSubscriptionCreateRQ,
         user: UserAccount = Depends(user_service.get_user_by_id),

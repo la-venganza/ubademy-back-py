@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=UserSearchResults)
+@router_v1.get("", status_code=status.HTTP_200_OK, response_model=UserSearchResults)
 async def get_users(
         *,
         keyword: Optional[str] = Query(None, min_length=3, example="gmail"),
@@ -52,7 +52,7 @@ def basic_user_to_create(user_in: UserCreateRQ, base_subscription):
                       subscriptions=[subscription])
 
 
-@router_v1.post("/", status_code=status.HTTP_200_OK, response_model=User)
+@router_v1.post("", status_code=status.HTTP_200_OK, response_model=User)
 async def post(user_in: UserCreateRQ, db: Session = Depends(deps.get_db), ) -> dict:
     email = user_in.email
     logger.info(f"Attempt to create new user for {email}")

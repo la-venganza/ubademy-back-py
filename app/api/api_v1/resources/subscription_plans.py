@@ -9,7 +9,7 @@ from app.schemas.subscription import Subscription, SubscriptionSearchResults
 router_v1 = APIRouter()
 
 
-@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=SubscriptionSearchResults)
+@router_v1.get("", status_code=status.HTTP_200_OK, response_model=SubscriptionSearchResults)
 async def get_subscription_plans(db: Session = Depends(deps.get_db),) -> dict:
     """
     List available subscriptions

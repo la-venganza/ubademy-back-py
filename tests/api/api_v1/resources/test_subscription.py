@@ -9,14 +9,14 @@ from tests.helper.user_subscription_helpler import user_subscription_create_inva
 # ------------------ User subscription post ------------------------ #
 def test_subscriptions_invalid_subscription(test_app, user_extra_data_db, mocker):
     mocker.patch.object(user, 'get_by_user_id', return_value=user_extra_data_db)
-    response = test_app.post("/api/v1/1/subscriptions/",
+    response = test_app.post("/api/v1/1/subscriptions",
                              data=json.dumps(user_subscription_create_invalid_subscription_json))
     assert response.status_code == 422
 
 
 def test_subscriptions_invalid_end_date(test_app, user_extra_data_db, mocker):
     mocker.patch.object(user, 'get_by_user_id', return_value=user_extra_data_db)
-    response = test_app.post("/api/v1/1/subscriptions/",
+    response = test_app.post("/api/v1/1/subscriptions",
                              data=json.dumps(user_subscription_create_invalid_end_date_json))
     assert response.status_code == 422
 
@@ -26,7 +26,7 @@ def test_subscriptions_create_ok(test_app, user_extra_data_db, user_free_subscri
     mocker.patch.object(subscription, 'get_by_subscription_plan', return_value=gold_subscription_db)
     mocker.patch.object(user_subscription, 'get_subscriptions_by_user_id', return_value=[user_free_subscription_db])
     mocker.patch.object(user_subscription, 'create', return_value=user_free_subscription_db)
-    response = test_app.post("/api/v1/1/subscriptions/",
+    response = test_app.post("/api/v1/1/subscriptions",
                              data=json.dumps(user_subscription_create_json))
     assert response.status_code == 200
     assert response.json() == user_subscription_response_json
