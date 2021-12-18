@@ -59,6 +59,7 @@ class EnrollCourseExamSearchResults(BaseModel):
 
 
 class EnrollCourseExamForStaff(EnrollCourseExamBase):
+    enroll_course_id: int
     exam: ExamBase
     answers: List[AnswerForStaff]
     exam_date: datetime
