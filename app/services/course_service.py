@@ -29,17 +29,9 @@ async def verify_course_with_creator(course_id: int, user_id: str, db: Session =
     return True
 
 
-async def get_full_course_by_id(course_id, db: Session = Depends(get_db)):
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
-    return course
-
-
 async def get_lesson_by_id(db: Session = Depends(get_db), course_id: int = 0, lesson_id: int = 0) -> Lesson:
     logging.info(f"Getting lesson: {lesson_id}")
-    course = await get_full_course_by_id(db=db, course_id=course_id)
+    course = await get_course_by_id(db=db, course_id=course_id)
 
     filtered_lessons = filter(lambda lesson_item: lesson_id == lesson_item.id, course.lessons)
     lesson = next(filtered_lessons, None)

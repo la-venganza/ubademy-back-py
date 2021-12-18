@@ -6,9 +6,12 @@ from fastapi.encoders import jsonable_encoder
 
 from app.services import course_service
 from app.crud import course
-from tests.helper.courses_helper import lesson_db_of_course_json, search_exams_response_json
+from app.schemas.course_exam import ExamBasics
+from tests.helper.courses_helper import lesson_db_of_course_json, search_exams_response_json, \
+    course_exam_with_enrollment_db
 
 
+# ------------------ Course by id ------------------------ #
 @pytest.mark.asyncio
 async def test_get_course_by_id_not_found(mocker):
     mocker.patch.object(course, 'get', return_value=None)
@@ -27,6 +30,7 @@ async def test_get_course_by_id_ok(course_db, mocker):
     assert course_from_db == course_db
 
 
+# ------------------ Course verify with creator ------------------------ #
 @pytest.mark.asyncio
 async def test_verify_course_with_creator_course_not_found(mocker):
     mocker.patch.object(course, 'get', return_value=None)
@@ -55,24 +59,7 @@ async def test_verify_course_with_creator_course_ok(course_db, mocker):
     assert response
 
 
-@pytest.mark.asyncio
-async def test_get_full_course_by_id_not_found(mocker):
-    mocker.patch.object(course, 'get', return_value=None)
-    db_session = MagicMock()
-    with pytest.raises(HTTPException) as exception_response:
-        await course_service.get_full_course_by_id(course_id=1, db=db_session)
-    assert exception_response.value.status_code == 404
-    assert str(exception_response.value.detail) == 'Course with id 1 was not found'
-
-
-@pytest.mark.asyncio
-async def test_get_full_course_by_id_ok(course_db, mocker):
-    mocker.patch.object(course, 'get', return_value=course_db)
-    db_session = MagicMock()
-    course_from_db = await course_service.get_full_course_by_id(course_id=1, db=db_session)
-    assert course_from_db == course_db
-
-
+# ------------------ Course lesson by id ------------------------ #
 @pytest.mark.asyncio
 async def test_get_lesson_by_id_course_not_found(mocker):
     mocker.patch.object(course, 'get', return_value=None)
@@ -101,6 +88,7 @@ async def test_get_lesson_by_id_id_lesson_ok(course_db, mocker):
     assert jsonable_encoder(lesson) == lesson_db_of_course_json
 
 
+# ------------------ Course lesson exam by id ------------------------ #
 @pytest.mark.asyncio
 async def test_get_exam_by_id_course_not_found(mocker):
     mocker.patch.object(course, 'get', return_value=None)
@@ -142,6 +130,7 @@ async def test_get_exam_by_id_exam_ok(course_with_exam_db, mocker):
     assert exam.minimum_qualification == 6
 
 
+# ------------------ Exam for staff ------------------------ #
 @pytest.mark.asyncio
 async def test_get_exams_for_staff_empty(mocker):
     mocker.patch.object(course, 'get_exams_from_courses', return_value=[])
@@ -163,6 +152,7 @@ async def test_get_exams_for_staff_ok(course_with_enrollments_with_exam_db, mock
     assert jsonable_encoder(exams) == [search_exams_response_json]
 
 
+# ------------------ Course for staff verification ------------------------ #
 @pytest.mark.asyncio
 async def test_verify_course_staff_false(course_db, mocker):
     mocker.patch.object(course, 'get', return_value=course_db)
@@ -177,3 +167,90 @@ async def test_verify_course_staff_true(course_db, mocker):
     db_session = MagicMock()
     verified = await course_service.verify_course_staff(user_id="1", course_id=1, db=db_session)
     assert verified
+
+
+# ------------------ Get course for staff ------------------------ #
+@pytest.mark.asyncio
+async def test_get_course_for_staff_false(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    with pytest.raises(HTTPException) as exception_response:
+        await course_service.get_course_for_staff(user_id="2", course_id=1, db=db_session)
+    assert exception_response.value.status_code == 403
+    assert str(exception_response.value.detail) == \
+           'Exams of course with id 1 can only be listed for it\'s creator or a collaborator'
+
+
+@pytest.mark.asyncio
+async def test_get_course_for_staff_true(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    course_response = await course_service.get_course_for_staff(user_id="1", course_id=1, db=db_session)
+    assert course_response == course_db
+
+
+# ------------------ Course exams for staff ------------------------ #
+@pytest.mark.asyncio
+async def test_get_course_exams_for_staff_no_course(mocker):
+    mocker.patch.object(course, 'get', return_value=None)
+    db_session = MagicMock()
+    with pytest.raises(HTTPException) as exception_response:
+        await course_service.get_course_exams_for_staff(
+            staff_id="1", course_id=1, db=db_session,
+            pagination_limit=1, pagination_offset=0)
+    assert exception_response.value.status_code == 404
+    assert str(exception_response.value.detail) == 'Course with id 1 was not found'
+
+
+@pytest.mark.asyncio
+async def test_get_course_exams_for_staff_no_staff(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    with pytest.raises(HTTPException) as exception_response:
+        await course_service.get_course_exams_for_staff(
+            staff_id="2", course_id=1, db=db_session,
+            pagination_limit=1, pagination_offset=0)
+    assert exception_response.value.status_code == 403
+    assert str(exception_response.value.detail) ==\
+           'Exams of course with id 1 can only be listed for it\'s creator or a collaborator'
+
+
+@pytest.mark.asyncio
+async def test_get_course_exams_for_staff_no_exams(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_db)
+    db_session = MagicMock()
+    exams = await course_service.get_course_exams_for_staff(
+        staff_id="1", course_id=1, db=db_session,
+        pagination_limit=1, pagination_offset=0)
+    assert exams == []
+
+
+exam_basics = ExamBasics(
+    course_id=1,
+    lesson_id=2,
+    id=1,
+    title='title',
+    description='description',
+    minimum_qualification=6,
+    active=False
+)
+
+
+@pytest.mark.asyncio
+async def test_get_course_exams_for_staff_ok(mocker):
+    mocker.patch.object(course, 'get', return_value=course_exam_with_enrollment_db)
+    db_session = MagicMock()
+    exams = await course_service.get_course_exams_for_staff(
+        staff_id="1", course_id=1, db=db_session,
+        pagination_limit=1, pagination_offset=0)
+    assert exams == [exam_basics]
+
+
+@pytest.mark.asyncio
+async def test_get_course_exams_for_staff_page_with_no_values(course_db, mocker):
+    mocker.patch.object(course, 'get', return_value=course_exam_with_enrollment_db)
+    db_session = MagicMock()
+    exams = await course_service.get_course_exams_for_staff(
+        staff_id="1", course_id=1, db=db_session,
+        pagination_limit=1, pagination_offset=1)
+    assert exams == []
