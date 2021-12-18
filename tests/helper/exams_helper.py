@@ -435,6 +435,7 @@ enroll_course_exam_response_staff_json = json.loads(
           ], \
           "title":"Exam test" \
        }, \
+       "enroll_course_id": 2, \
        "exam_date":"2021-01-01T13:59:57", \
        "grade":null \
     }'
