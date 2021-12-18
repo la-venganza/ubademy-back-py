@@ -225,19 +225,8 @@ async def test_get_course_exams_for_staff_no_exams(course_db, mocker):
     assert exams == []
 
 
-exam_basics = ExamBasics(
-    course_id=1,
-    lesson_id=2,
-    id=1,
-    title='title',
-    description='description',
-    minimum_qualification=6,
-    active=False
-)
-
-
 @pytest.mark.asyncio
-async def test_get_course_exams_for_staff_ok(mocker):
+async def test_get_course_exams_for_staff_ok(exam_basics, mocker):
     mocker.patch.object(course, 'get', return_value=course_exam_with_enrollment_db)
     db_session = MagicMock()
     exams = await course_service.get_course_exams_for_staff(
