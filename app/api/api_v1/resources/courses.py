@@ -29,7 +29,7 @@ async def get_course_types():
     return {"course_types": CourseType.list()}
 
 
-@router_v1.get("/", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
+@router_v1.get("", status_code=status.HTTP_200_OK, response_model=CourseSearchResults)
 async def search_courses(
         *,
         keyword: Optional[str] = Query(None, min_length=3, example="java"),
@@ -54,7 +54,7 @@ async def search_courses(
     return {"results": list(results)[:max_results]}
 
 
-@router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Course)
+@router_v1.post("", status_code=status.HTTP_201_CREATED, response_model=Course)
 async def create_course(course_in: CourseCreateRQ, db: Session = Depends(deps.get_db), ) -> dict:
     user_id = course_in.user_id
     await user_service.get_user_by_id(db=db, user_id=user_id)

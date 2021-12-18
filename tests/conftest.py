@@ -10,6 +10,7 @@ from app.models.enroll_course import EnrollCourse
 from app.models.subscription import Subscription
 from app.models.user_subscription import UserSubscription
 from app.models.enroll_course_exam import EnrollCourseExam
+from app.schemas.course_exam import ExamBasics
 from tests.helper.courses_helper import course_db_json, course_exam_with_enrollment_with_exams_db_json
 from tests.helper.exams_helper import course_exam_db_json, enroll_course_exam_db_json
 from tests.helper.enroll_course_helper import enroll_course_db_json
@@ -119,3 +120,16 @@ def user_subscriptions_all_db(user_free_subscription_db, user_gold_subscription_
 @pytest.fixture(scope="module")
 def user_subscriptions_free_and_gold_db(user_free_subscription_db, user_gold_subscription_db):
     return [user_free_subscription_db, user_gold_subscription_db]
+
+
+@pytest.fixture(scope="module")
+def exam_basics():
+    return ExamBasics(
+            course_id=1,
+            lesson_id=2,
+            id=1,
+            title='title',
+            description='description',
+            minimum_qualification=6,
+            active=False
+    )

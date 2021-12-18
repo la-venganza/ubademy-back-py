@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 router_v1 = APIRouter()
 
 
-@router_v1.post("/", status_code=status.HTTP_201_CREATED, response_model=Exam)
+@router_v1.post("", status_code=status.HTTP_201_CREATED, response_model=Exam)
 async def create_exam(course_id: int, lesson_id: int, exam_in: ExamCreateRq,
                       lesson: Lesson = Depends(course_service.get_lesson_by_id),
                       db: Session = Depends(deps.get_db),

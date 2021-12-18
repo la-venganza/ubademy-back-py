@@ -7,7 +7,8 @@ from app import crud
 from app.models.course import Exam
 from app.models.course import Lesson
 from app.deps import get_db
-from app.schemas.course_exam import CourseExam
+from app.schemas.course_exam import CourseExam, ExamBasics
+from app.utils import pagination_utils
 
 
 async def get_course_by_id(course_id, db: Session = Depends(get_db)):
@@ -28,17 +29,9 @@ async def verify_course_with_creator(course_id: int, user_id: str, db: Session =
     return True
 
 
-async def get_full_course_by_id(course_id, db: Session = Depends(get_db)):
-    course = crud.course.get(db=db, id=course_id)
-    if course is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Course with id {course_id} was not found")
-    return course
-
-
 async def get_lesson_by_id(db: Session = Depends(get_db), course_id: int = 0, lesson_id: int = 0) -> Lesson:
     logging.info(f"Getting lesson: {lesson_id}")
-    course = await get_full_course_by_id(db=db, course_id=course_id)
+    course = await get_course_by_id(db=db, course_id=course_id)
 
     filtered_lessons = filter(lambda lesson_item: lesson_id == lesson_item.id, course.lessons)
     lesson = next(filtered_lessons, None)
@@ -103,8 +96,45 @@ async def get_exams_for_staff(staff_id: str, active_students_filter: bool, grade
     return exams
 
 
+async def get_course_exams_for_staff(staff_id: str, course_id: int, pagination_limit: int, pagination_offset: int,
+                                     db: Session = Depends(get_db)):
+    course = await get_course_for_staff(course_id=course_id, user_id=staff_id, db=db)
+
+    exams = []
+    for lesson in course.lessons:
+        if lesson.exam:
+            exam = lesson.exam
+            exam_basics = ExamBasics(
+                course_id=course.id,
+                lesson_id=lesson.id,
+                id=exam.id,
+                title=exam.title,
+                description=exam.description,
+                minimum_qualification=exam.minimum_qualification,
+                active=exam.active
+            )
+            exams.append(exam_basics)
+    paginated_exams = list(pagination_utils.manual_pagination_chunks(exams, pagination_limit))
+    if len(paginated_exams) <= pagination_offset:
+        return []
+    return paginated_exams[pagination_offset]
+
+
 async def verify_course_staff(course_id: int, user_id: str, db: Session = Depends(get_db)):
     course = await get_course_by_id(course_id, db=db)
     if course.creator_id == user_id or any(collaborator.user_id == user_id for collaborator in course.collaborators):
         return True
     return False
+
+
+async def get_course_for_staff(course_id: int, user_id: str, db: Session = Depends(get_db)):
+    course = await get_course_by_id(course_id, db=db)
+    staff_verified = True if \
+        (course.creator_id == user_id or any(collaborator.user_id == user_id for collaborator in course.collaborators))\
+        else False
+    if not staff_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Exams of course with id {course_id} can only be listed for it's creator or a collaborator"
+        )
+    return course

@@ -74,14 +74,14 @@ def test_courses_create_ok(test_app, course_db, free_subscription_db, mocker):
     mocker.patch.object(user, 'get_by_user_id', return_value=UserAccount())
     mocker.patch.object(subscription, "get_by_subscription_plan", return_value=free_subscription_db)
     mocker.patch.object(course, 'create', return_value=course_db)
-    response = test_app.post("/api/v1/courses/", data=json.dumps(course_to_create_json))
+    response = test_app.post("/api/v1/courses", data=json.dumps(course_to_create_json))
     assert response.status_code == 201
     assert response.json() == course_response_json
 
 
 def test_courses_fail_create_user_not_exists(test_app, mocker):
     mocker.patch.object(user, 'get_by_user_id', return_value=None)
-    response = test_app.post("/api/v1/courses/", data=json.dumps(course_to_create_json))
+    response = test_app.post("/api/v1/courses", data=json.dumps(course_to_create_json))
     assert response.status_code == 404
     assert response.json() == {'detail': 'The user with id 1 was not found'}
 
