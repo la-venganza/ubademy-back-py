@@ -24,4 +24,4 @@ def test_crud_course_get_courses_with_filters(course_db):
     db_session = MagicMock()
 
     course.get_courses_with_filters(db=db_session, plan_filter=SubscriptionTitle.free,
-                                    category_filter=CourseType.programming)
+                                    category_filter=CourseType.programming, keyword="it")

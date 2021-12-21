@@ -44,10 +44,24 @@ def test_courses_ok_with_results(test_app, course_db, mocker):
 
 
 def test_courses_ok_filter(test_app, course_db, mocker):
-    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, other_course_db])
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
     response = test_app.get("/api/v1/courses?keyword=java")
     assert response.status_code == 200
+    assert response.json() == {'results': [course_basics_response_json, course_basics_response_json]}
+
+
+def test_courses_ok_filter_with_max_results(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
+    response = test_app.get("/api/v1/courses?keyword=java&max_results=1")
+    assert response.status_code == 200
     assert response.json() == {'results': [course_basics_response_json]}
+
+
+def test_courses_ok_filter_with_max_results_ignore(test_app, course_db, mocker):
+    mocker.patch.object(course, 'get_courses_with_filters', return_value=[course_db, course_db])
+    response = test_app.get("/api/v1/courses?plan=Free&max_results=1")
+    assert response.status_code == 200
+    assert response.json() == {'results': [course_basics_response_json, course_basics_response_json]}
 
 
 def test_courses_ok_pagination_invalid_page_value(test_app):

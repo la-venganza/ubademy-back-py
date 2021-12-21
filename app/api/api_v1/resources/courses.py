@@ -45,13 +45,12 @@ async def search_courses(
     Max results param is only taken into account when keyword param is sent
     """
     await pagination_utils.validate_pagination(page=page, page_size=page_size)
-    courses = crud.course.get_courses_with_filters(db=db, category_filter=category, plan_filter=plan,
+    courses = crud.course.get_courses_with_filters(db=db, category_filter=category, plan_filter=plan, keyword=keyword,
                                                    limit=page_size, offset=(page - 1) * page_size)
     if not keyword:
         return {"results": courses}
 
-    results = filter(lambda course: keyword.lower() in course.hashtags.lower(), courses)
-    return {"results": list(results)[:max_results]}
+    return {"results": list(courses)[:max_results]}
 
 
 @router_v1.post("", status_code=status.HTTP_201_CREATED, response_model=Course)
