@@ -41,7 +41,7 @@ async def search_courses(
         db: Session = Depends(deps.get_db),
 ) -> dict:
     """
-    Search for courses based on hashtags keyword
+    Search for courses based on hashtags keyword, title and description
     Max results param is only taken into account when keyword param is sent
     """
     await pagination_utils.validate_pagination(page=page, page_size=page_size)
