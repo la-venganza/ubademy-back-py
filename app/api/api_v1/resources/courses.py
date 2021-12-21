@@ -91,12 +91,12 @@ async def get(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"The course with id {course_id} was not found")
     if user_id:
-        if any(enrollment.user_id == user_id and enrollment.active for enrollment in course.enrollments):
-            return CourseStudent.from_orm(course)
+        if course.creator_id == user_id:
+            return CourseCreator.from_orm(course)
         elif any(collaborator.user_id == user_id and collaborator.active for collaborator in course.collaborators):
             return CourseCollaborator.from_orm(course)
-        elif course.creator_id == user_id:
-            return CourseCreator.from_orm(course)
+        elif any(enrollment.user_id == user_id and enrollment.active for enrollment in course.enrollments):
+            return CourseStudent.from_orm(course)
         else:
             return CourseBasics.from_orm(course)
 
