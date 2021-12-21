@@ -34,8 +34,16 @@ class CRUDCourse(CRUDBase[Course, CourseCreate, CourseUpdate]):
         return query.all()
 
     def get_courses_with_filters(self, db: Session, *, category_filter: CourseType, plan_filter: SubscriptionTitle,
-                                 offset: int = 0, limit: int = 100) -> List[Course]:
+                                 keyword: str, offset: int = 0, limit: int = 100) -> List[Course]:
         query = db.query(Course)
+        if keyword is not None:
+            keyword_contains = '%{0}%'.format(keyword)
+            query = query.filter(or_(
+                Course.hashtags.ilike(keyword_contains),
+                Course.title.ilike(keyword_contains),
+                Course.description.ilike(keyword_contains)
+            )
+            )
         if category_filter is not None:
             query = query.filter(func.lower(Course.type) == func.lower(category_filter.title()))
         if plan_filter is not None:
